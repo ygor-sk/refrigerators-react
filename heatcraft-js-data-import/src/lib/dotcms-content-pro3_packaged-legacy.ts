@@ -2,14 +2,12 @@ import {ContentDataType, ContentKind, ContentType} from "./dotcms-writer";
 
 export const contentTypes: ContentType[] = [
     {
-        name: "ProductV7Pro3PackagedLegacy",
+        name: "ProductX4Pro3PackagedLegacy",
         contentKind: ContentKind.PRO3_PACKAGED_LEGACY,
         attributes: [
             {id: "productId", description: "productId", required: true, indexed: true, unique: true, dataType: ContentDataType.INTEGER},
             {id: "modelNumber", description: "modelNumber", required: true, indexed: true, unique: false},
             {id: "brand", description: "brand", required: true, dataType: ContentDataType.SELECT},
-            {id: "group", description: "group", required: true, dataType: ContentDataType.SELECT},
-            {id: "category", description: "category", required: true, dataType: ContentDataType.SELECT},
             {id: "style", description: "style", required: true, dataType: ContentDataType.SELECT},
             {id: "unitVoltage", description: "Voltage", required: true, dataType: ContentDataType.SELECT},
             {id: "motorType", description: "Evap Fan Motor Type", required: true, dataType: ContentDataType.SELECT},
@@ -25,7 +23,7 @@ export const contentTypes: ContentType[] = [
         ]
     },
     {
-        name: "ProductV7Pro3PackagedLegacyDetails",
+        name: "ProductX4Pro3PackagedLegacyDetails",
         contentKind: ContentKind.PRO3_PACKAGED_LEGACY,
         attributes: [
             {id: "productId", description: "productId", required: true, indexed: true, unique: true, dataType: ContentDataType.INTEGER},

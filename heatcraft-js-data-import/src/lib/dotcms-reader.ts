@@ -14,16 +14,21 @@ import _ from "lodash";
 import {
     initialBrands,
     initialCategories,
+    initialCategoryAttributes,
     initialDocuments,
     initialGroups,
     initialProductCompareAttributes,
-    initialProductDetail, initialProductDetailCrossReference,
+    initialProductDetail,
+    initialProductDetailCrossReference,
     initialProductDetailDictionaries,
     initialProductDetailSpecification,
     initialProductListAttributes,
     initialStyles
 } from "./initial-product-metadata";
-import {initialCategoryAttributes} from "./initial-product-metadata";
+import {
+    DUMMY_REFRIGERATED_WAREHOUSE_UNIT_COOLERS_LEGACY,
+    DUMMY_REFRIGERATED_WAREHOUSE_UNIT_COOLERS_NEW
+} from "./dummy-data";
 
 export interface ProductGroup {
     contentKind: ContentKind,
@@ -33,6 +38,8 @@ export interface ProductGroup {
 const MAX_PRODUCT_COUNT = 9999999;
 
 export async function readProductGroups(saveAnalysis: boolean): Promise<ProductGroup[]> {
+    const crawledProducts = await crawlWalkInUnitCoolers();
+    const sourceProducts = consolidateWalkInUnitCoolersLegacyProducts(crawledProducts);
     const productGroups: ProductGroup[] = [];
 
     if (_.includes(contentKinds, ContentKind.META_GROUP)) {
@@ -79,24 +86,71 @@ export async function readProductGroups(saveAnalysis: boolean): Promise<ProductG
         productGroups.push({contentKind: ContentKind.META_PRODUCT_DETAIL_CROSS_REFERENCE, sourceProducts: initialProductDetailCrossReference})
     }
 
-    if (_.includes(contentKinds, ContentKind.PRO3_PACKAGED_LEGACY)) {
+    // PRO3 Packaged
+
+    const includePro3Packaged = _.includes(contentKinds, ContentKind.PRO3_PACKAGED);
+
+    const includePro3PackagedLegacy = _.includes(contentKinds, ContentKind.PRO3_PACKAGED_LEGACY);
+    if (includePro3Packaged || includePro3PackagedLegacy) {
         let crawledProducts = await crawlPro3PackagedLegacyProducts();
         let sourceProducts = consolidatePro3PackagedLegacyProducts(crawledProducts);
         if (saveAnalysis) {
             await saveFile(`../target-analysis/generated/crawl-pro3_packaged-consolidated.json`, JSON.stringify(sourceProducts, null, 2));
             await saveFile(`../target-analysis/generated/crawl-pro3_packaged.json`, JSON.stringify(crawledProducts, null, 2));
         }
-        productGroups.push({
-            contentKind: ContentKind.PRO3_PACKAGED_LEGACY,
-            sourceProducts: sourceProducts.products.slice(0, MAX_PRODUCT_COUNT),
-        });
+        if (includePro3Packaged) {
+            productGroups.push({
+                contentKind: ContentKind.PRO3_PACKAGED,
+                sourceProducts: sourceProducts.products.slice(0, MAX_PRODUCT_COUNT),
+            });
+        }
+        if (includePro3PackagedLegacy) {
+            productGroups.push({
+                contentKind: ContentKind.PRO3_PACKAGED_LEGACY,
+                sourceProducts: sourceProducts.products.slice(0, MAX_PRODUCT_COUNT),
+            });
+        }
     }
+
+    const includePro3PackagedNew = _.includes(contentKinds, ContentKind.PRO3_PACKAGED_NEW);
+    const includePro3PackagedNewDictionary = _.includes(contentKinds, ContentKind.PRO3_PACKAGED_NEW_DICTIONARY);
+    if (includePro3Packaged || includePro3PackagedNew || includePro3PackagedNewDictionary) {
+        const pro3PackagedProducts = await readXlsxProductsPPRO3();
+        if (includePro3PackagedNewDictionary) {
+            if (saveAnalysis) {
+                await saveFile('../target-analysis/generated/source-consolidated-new-packaged-dictionary.json', JSON.stringify(pro3PackagedProducts.dictionaries, null, 2));
+            }
+            productGroups.push({
+                contentKind: ContentKind.PRO3_PACKAGED_NEW_DICTIONARY,
+                sourceProducts: pro3PackagedProducts.dictionaries,
+            });
+        }
+        if (includePro3Packaged || includePro3PackagedNew) {
+            if (saveAnalysis) {
+                await saveFile('../target-analysis/generated/source-consolidated-new-packaged.json', JSON.stringify(pro3PackagedProducts.products, null, 2));
+            }
+            if (includePro3Packaged) {
+                productGroups.push({
+                    contentKind: ContentKind.PRO3_PACKAGED,
+                    sourceProducts: pro3PackagedProducts.products.slice(0, MAX_PRODUCT_COUNT),
+                });
+            }
+            if (includePro3PackagedNew) {
+                productGroups.push({
+                    contentKind: ContentKind.PRO3_PACKAGED_NEW,
+                    sourceProducts: pro3PackagedProducts.products.slice(0, MAX_PRODUCT_COUNT),
+                });
+            }
+        }
+    }
+
+    ///// WALK IN UNIT COOLERS
+
+    const includeWalkInUnitCoolers = _.includes(contentKinds, ContentKind.WALK_IN_UNIT_COOLERS);
 
     const includeWalkInUnitCoolersLegacy = _.includes(contentKinds, ContentKind.WALK_IN_UNIT_COOLERS_LEGACY);
     const includeWalkInUnitCoolersLegacyDictionary = _.includes(contentKinds, ContentKind.WALK_IN_UNIT_COOLERS_LEGACY_DICTIONARY);
-    if (includeWalkInUnitCoolersLegacy || includeWalkInUnitCoolersLegacyDictionary) {
-        let crawledProducts = await crawlWalkInUnitCoolers();
-        let sourceProducts = consolidateWalkInUnitCoolersLegacyProducts(crawledProducts);
+    if (includeWalkInUnitCoolers || includeWalkInUnitCoolersLegacy || includeWalkInUnitCoolersLegacyDictionary) {
 
         if (includeWalkInUnitCoolersLegacyDictionary) {
             if (saveAnalysis) {
@@ -108,47 +162,32 @@ export async function readProductGroups(saveAnalysis: boolean): Promise<ProductG
             });
         }
 
-        if (includeWalkInUnitCoolersLegacy) {
+        if (includeWalkInUnitCoolers || includeWalkInUnitCoolersLegacy) {
             if (saveAnalysis) {
                 await saveFile(`../target-analysis/generated/crawl-walk_in_unit_coolers.json`, JSON.stringify(crawledProducts, null, 2));
                 await saveFile(`../target-analysis/generated/crawl-walk_in_unit_coolers-consolidated.json`, JSON.stringify(sourceProducts.products, null, 2));
                 await saveFile(`../target-analysis/generated/crawl-walk_in_unit_coolers-attributes.json`, JSON.stringify(sourceProducts.uniqueAttributeNames, null, 2));
             }
-            productGroups.push({
-                contentKind: ContentKind.WALK_IN_UNIT_COOLERS_LEGACY,
-                sourceProducts: sourceProducts.products.slice(0, MAX_PRODUCT_COUNT),
-            });
+            if (includeWalkInUnitCoolers) {
+                productGroups.push({
+                    contentKind: ContentKind.WALK_IN_UNIT_COOLERS,
+                    sourceProducts: sourceProducts.products.slice(0, MAX_PRODUCT_COUNT),
+                });
+            }
+            if (includeWalkInUnitCoolersLegacy) {
+                productGroups.push({
+                    contentKind: ContentKind.WALK_IN_UNIT_COOLERS_LEGACY,
+                    sourceProducts: sourceProducts.products.slice(0, MAX_PRODUCT_COUNT),
+                });
+            }
         }
     }
 
-    let includePro3PackagedNew = _.includes(contentKinds, ContentKind.PRO3_PACKAGED_NEW);
-    let includePro3PackagedNewDictionary = _.includes(contentKinds, ContentKind.PRO3_PACKAGED_NEW_DICTIONARY);
-    if (includePro3PackagedNew || includePro3PackagedNewDictionary) {
-        const pro3PackagedProducts = await readXlsxProductsPPRO3();
-        if (includePro3PackagedNewDictionary) {
-            if (saveAnalysis) {
-                await saveFile('../target-analysis/generated/source-consolidated-new-packaged-dictionary.json', JSON.stringify(pro3PackagedProducts.dictionaries, null, 2));
-            }
-            productGroups.push({
-                contentKind: ContentKind.PRO3_PACKAGED_NEW_DICTIONARY,
-                sourceProducts: pro3PackagedProducts.dictionaries,
-            });
-        }
-        if (includePro3PackagedNew) {
-            if (saveAnalysis) {
-                await saveFile('../target-analysis/generated/source-consolidated-new-packaged.json', JSON.stringify(pro3PackagedProducts.products, null, 2));
-            }
-            productGroups.push({
-                contentKind: ContentKind.PRO3_PACKAGED_NEW,
-                sourceProducts: pro3PackagedProducts.products.slice(0, MAX_PRODUCT_COUNT),
-            });
-        }
-    }
-    let includeWalkInNew = _.includes(contentKinds, ContentKind.WALK_IN_UNIT_COOLERS_NEW);
-    let includeWalkInNewDictionary = _.includes(contentKinds, ContentKind.WALK_IN_UNIT_COOLERS_NEW_DICTIONARY);
-    if (includeWalkInNew || includeWalkInNewDictionary) {
+    const includeWalkInUnitCoolersNew = _.includes(contentKinds, ContentKind.WALK_IN_UNIT_COOLERS_NEW);
+    const includeWalkInUnitCoolersNewDictionary = _.includes(contentKinds, ContentKind.WALK_IN_UNIT_COOLERS_NEW_DICTIONARY);
+    if (includeWalkInUnitCoolers || includeWalkInUnitCoolersNew || includeWalkInUnitCoolersNewDictionary) {
         const walkInUnitCoolerProducts = await readWalkInUnitCoolerProducts();
-        if (includeWalkInNewDictionary) {
+        if (includeWalkInUnitCoolersNewDictionary) {
             if (saveAnalysis) {
                 await saveFile(`../target-analysis/generated/source-consolidated-new-walk-in-unit-coolers-dictionaries.json`, JSON.stringify(walkInUnitCoolerProducts.dictionaries, null, 2));
             }
@@ -157,16 +196,39 @@ export async function readProductGroups(saveAnalysis: boolean): Promise<ProductG
                 sourceProducts: walkInUnitCoolerProducts.dictionaries
             })
         }
-        if (includeWalkInNew) {
+        if (includeWalkInUnitCoolers || includeWalkInUnitCoolersNew) {
             if (saveAnalysis) {
                 await saveFile(`../target-analysis/generated/source-consolidated-new-walk-in-unit-coolers.json`, JSON.stringify(walkInUnitCoolerProducts.products, null, 2));
             }
-            productGroups.push({
-                contentKind: ContentKind.WALK_IN_UNIT_COOLERS_NEW,
-                sourceProducts: walkInUnitCoolerProducts.products.slice(0, MAX_PRODUCT_COUNT),
-            })
+            if (includeWalkInUnitCoolers) {
+                productGroups.push({
+                    contentKind: ContentKind.WALK_IN_UNIT_COOLERS,
+                    sourceProducts: walkInUnitCoolerProducts.products.slice(0, MAX_PRODUCT_COUNT),
+                })
+            }
+            if (includeWalkInUnitCoolersNew) {
+                productGroups.push({
+                    contentKind: ContentKind.WALK_IN_UNIT_COOLERS_NEW,
+                    sourceProducts: walkInUnitCoolerProducts.products.slice(0, MAX_PRODUCT_COUNT),
+                })
+            }
         }
     }
+
+    if (_.includes(contentKinds, ContentKind.REFRIGERATED_WAREHOUSE_UNIT_COOLERS_NEW)) {
+        productGroups.push({
+            contentKind: ContentKind.REFRIGERATED_WAREHOUSE_UNIT_COOLERS_NEW,
+            sourceProducts: DUMMY_REFRIGERATED_WAREHOUSE_UNIT_COOLERS_NEW,
+        });
+    }
+
+    if (_.includes(contentKinds, ContentKind.REFRIGERATED_WAREHOUSE_UNIT_COOLERS_LEGACY)) {
+        productGroups.push({
+            contentKind: ContentKind.REFRIGERATED_WAREHOUSE_UNIT_COOLERS_LEGACY,
+            sourceProducts: DUMMY_REFRIGERATED_WAREHOUSE_UNIT_COOLERS_LEGACY,
+        });
+    }
+
     if (_.includes(contentKinds, ContentKind.MAIN_MENU)) {
         productGroups.push({
             contentKind: ContentKind.MAIN_MENU,

@@ -33,12 +33,17 @@ export interface WalkInUnitCoolerProducts {
     dictionaries: SourceProduct[]
 }
 
-function attributeMode(attributeName: string): "parseInt" | "toString" | undefined {
+function attributeMode(attributeName: string): "parseInt" | "toString" | "fraction" | undefined {
     switch (attributeName) {
         case "FPI":
             return "parseInt";
         case "Part Number":
             return "toString";
+        case "Suction OD":
+        case "Coil Inlet OD":
+        case "External Equalizer OD":
+        case "Drain MPT":
+            return "fraction";
         default:
             return undefined;
     }
@@ -104,6 +109,7 @@ function collectAttributes(style: Style,
                         toDotCmsItemId(productRow['Brand']) as Brand,
                     group: 'evaporators_unit_coolers',
                     category: 'walk_in_unit_coolers',
+                    revision: 'NEW',
                     style: style,
                     filePaths: [...Array(pdfCount).keys()].map(i => `/resources/pdf/model/low_profile/${modelNumber}_${i}.pdf`.toLowerCase()),
                     walkInUnitCoolers: {
@@ -124,23 +130,31 @@ function collectAttributes(style: Style,
 
             // simple attributes
             for (const [attributeName, attributeValue] of Object.entries(productRow)) {
-                let attribute = attributes[attributeName];
+                const attribute = attributes[attributeName];
                 if (attribute.name === 'Legacy Model') {
-                    if (attributeValue !== 'N/A') {
+                    if (attributeValue !== null) {
                         product.legacyModels.push(attributeValue);
                     }
                 } else if (attribute.isSimple) {
-                    if (product[attributeName] !== undefined && product[attributeName] !== attributeValue) {
-                        console.log({row});
-                        throw `Non-unique value. Model ${modelNumber}, attribute: ${attributeName}, values: [${product[attributeName]}, ${attributeValue}]`;
+                    if (attribute.name === "Application") {
+                        if (product[attributeName] === undefined) {
+                            product[attributeName] = new Set<string>();
+                        }
+                        product[attributeName].add(attributeValue);
+                    } else {
+                        if (product[attributeName] !== undefined && product[attributeName] !== attributeValue) {
+                            console.log({row});
+                            throw `Non-unique value. Model ${modelNumber}, attribute: ${attributeName}, values: [${product[attributeName]}, ${attributeValue}]`;
+                        }
+                        product[attributeName] = attributeValue;
                     }
-                    product[attributeName] = attributeValue;
                 }
             }
 
             // capacity
             if (_.some(attributes, (attr) => attr.name === 'Refrigerant')) {
                 product.walkInUnitCoolers.capacity.push({
+                    applicationType: productRow["Application"],
                     inputConditions: {
                         refrigerant: productRow['Refrigerant'],
                         temperatureDifferenceF: productRow['TD °F'],
@@ -237,15 +251,15 @@ function parseReverseCycleKitAttribute(sheet: WorkSheet, row: number, cellAddres
 }
 
 
-type ParseValueMode = "string" | "number" | "numberFmt" | "parseInt" | "toString";
+type ParseValueMode = "string" | "number" | "numberFmt" | "parseInt" | "toString" | "fraction";
 
 function parseCellValue<T>(sheet: WorkSheet, row: number, column: number, mode: ParseValueMode = undefined) {
     let valueCell = sheet[utils.encode_cell({r: row, c: column})];
-    if (valueCell === undefined) {
-        return undefined;
+    if (valueCell === undefined || valueCell === null) {
+        return null;
     }
     if (valueCell.t === 's') {
-        if (valueCell.v.trim() === 'NA' || valueCell.v.trim() === '-' || valueCell.v.trim() === '---' || valueCell.v.trim() === 'Std') {
+        if (valueCell.v.trim() === 'NA' || valueCell.v.trim() === 'N/A' || valueCell.v.trim() === '-' || valueCell.v.trim() === '---' || valueCell.v.trim() === 'Std') {
             return null;
         } else {
             switch (mode) {
@@ -255,6 +269,30 @@ function parseCellValue<T>(sheet: WorkSheet, row: number, column: number, mode: 
                     throw Error(`Wrong cell type. Expected: ${mode}, actual: string, value: ${valueCell.v}`);
                 case "parseInt":
                     return parseInt(valueCell.v.trim())
+                case "fraction":
+                    switch (valueCell.v) {
+                        case "1/2":
+                            return 0.5;
+                        case "1/4":
+                            return 0.25;
+                        case "3/4":
+                            return 0.75;
+                        case "3/8":
+                            return 0.375;
+                        case "5/8":
+                            return 0.625;
+                        case "7/8":
+                            return 0.875;
+                        case "1 - 1/8":
+                        case "1-1/8":
+                            return 1.125;
+                        case "1 - 3/8":
+                            return 1.375;
+                        case "1 - 5/8":
+                            return 1.625;
+                        default:
+                            throw Error(`Unknown fraction: ${valueCell.v} at row: ${row}, col: ${column}`);
+                    }
                 case "string":
                 case "toString":
                 default:
@@ -271,11 +309,16 @@ function parseCellValue<T>(sheet: WorkSheet, row: number, column: number, mode: 
                 return valueCell.v.toString();
             case "number":
             case "parseInt":
+            case "fraction":
             default:
-                return valueCell.v;
+                if (valueCell.v === undefined || isNaN(valueCell.v)) {
+                    return null;
+                } else {
+                    return valueCell.v;
+                }
         }
     } else {
-        throw `Unsupported expression type: ${valueCell.t}`;
+        throw new Error(`Unsupported expression type: ${valueCell.t}`);
     }
 }
 
@@ -311,6 +354,9 @@ async function readProducts(workBook: WorkBook, excelFile: ExcelFile): Promise<S
         collectAttributes(excelFile.style, products, workBook.Sheets['Hot Gas Reverse Cycle Kits'], excelFile.reverseCycleKits.modelNumberCellAddressRaw, {
             reverseCycleKitCellAddressesRaw: excelFile.reverseCycleKits.cellAddressesRaw
         });
+    }
+    for (const product of Object.values(products)) {
+        product["Application"] = Array.from(product["Application"]).join(" / ");
     }
     return Object.values(products);
 }
@@ -391,7 +437,7 @@ const excelFiles: ExcelFile[] = [
     },
     {
         style: "center_mount",
-        filename: "../source-xlsx/v4/CM Data PC_05-28-2020.xlsx",
+        filename: "../source-xlsx/v4/CM Data PC_08-17-2020.xlsx",
         pricing: {
             modelNumberCellAddressRaw: "G4",
             attributeRanges: {'B4:B4': true, 'F4:H4': true},
@@ -419,7 +465,7 @@ const excelFiles: ExcelFile[] = [
     },
     {
         style: "low_velocity_center_mount",
-        filename: "../source-xlsx/v4/LVCM Data PC_06-16-2020.xlsx",
+        filename: "../source-xlsx/v4/LVCM Data PC_08-19-2020.xlsx",
         pricing: {
             modelNumberCellAddressRaw: "G4",
             attributeRanges: {'B4:B4': true, 'F4:H4': true},
@@ -449,42 +495,42 @@ const excelFiles: ExcelFile[] = [
             }
         }
     },
-    // {
-    //     style: "medium_profile",
-    //     pricing: {
-    //         modelNumberCellAddressRaw: "G4",
-    //         attributeRanges: {'B4:B4': true, 'F4:H4': true},
-    //         optionRanges: {
-    //             'I4:Q4': "preferred",
-    //             'R4:Y4': "alaCarte",
-    //             'Z4:AE4': "alaCarte",
-    //             'AF4:AL4': "alaCarte",
-    //             'AM4:AP4': "alaCarte",
-    //             'AQ4:AQ4': "alaCarte",
-    //             'AU4:AW4': "alaCarte",
-    //         }
-    //     },
-    //     techData: {
-    //         modelNumberCellAddressRaw: "A1",
-    //         attributeRanges: {'A1:C1': true, 'D1:J1': false, 'K1:N1': true, 'O1:P1': false, 'Q1:AQ1': true}
-    //     },
-    //     filename: "../source-xlsx/v4/Medium Profile Data PC_07-21-2020.xlsx",
-    //     expansionValves: {
-    //         modelNumberCellAddressRaw: 'A2',
-    //         addresses: ['B2', 'C2', 'D2', 'E2', 'F2'],
-    //     },
-    //     liquidValves: {
-    //         modelNumberCellAddressRaw: 'A3',
-    //         addresses: ['B2', 'D2', 'F2', 'H2', 'J2', 'L2'],
-    //     },
-    //     reverseCycleKits: {
-    //         modelNumberCellAddressRaw: "B1",
-    //         cellAddressesRaw: {
-    //             partNumber: "C1",
-    //             price: "D1",
-    //         }
-    //     }
-    // },
+    {
+        style: "medium_profile",
+        filename: "../source-xlsx/v4/Medium Profile Data PC_08-28-2020.xlsx",
+        pricing: {
+            modelNumberCellAddressRaw: "G4",
+            attributeRanges: {'B4:B4': true, 'F4:H4': true},
+            optionRanges: {
+                'I4:Q4': "preferred",
+                'R4:Y4': "alaCarte",
+                'Z4:AE4': "alaCarte",
+                'AF4:AL4': "alaCarte",
+                'AM4:AP4': "alaCarte",
+                'AQ4:AQ4': "alaCarte",
+                'AU4:AW4': "alaCarte",
+            }
+        },
+        techData: {
+            modelNumberCellAddressRaw: "A1",
+            attributeRanges: {'A1:C1': true, 'D1:J1': false, 'K1:N1': true, 'O1:P1': false, 'Q1:AW1': true}
+        },
+        expansionValves: {
+            modelNumberCellAddressRaw: 'A2',
+            addresses: ['B2', 'C2', 'D2', 'E2', 'F2'],
+        },
+        liquidValves: {
+            modelNumberCellAddressRaw: 'A3',
+            addresses: ['B2', 'D2', 'F2', 'H2', 'J2', 'L2'],
+        },
+        reverseCycleKits: {
+            modelNumberCellAddressRaw: "B1",
+            cellAddressesRaw: {
+                partNumber: "C1",
+                price: "D1",
+            }
+        }
+    },
 ]
 
 export async function readWalkInUnitCoolerProducts(): Promise<WalkInUnitCoolerProducts> {

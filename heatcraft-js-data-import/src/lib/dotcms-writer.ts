@@ -6,13 +6,17 @@ import {DictionaryId, SourceProduct} from "heatcraft-js-shared/lib/source-produc
 const ATTRIBUTE_UUID_NAMESPACE = 'fc55f50d-8e63-4395-aafd-8808c9ace675';
 
 export enum ContentKind {
+    PRO3_PACKAGED,
     PRO3_PACKAGED_NEW,
     PRO3_PACKAGED_NEW_DICTIONARY,
     PRO3_PACKAGED_LEGACY,
     WALK_IN_UNIT_COOLERS_NEW,
     WALK_IN_UNIT_COOLERS_NEW_DICTIONARY,
+    WALK_IN_UNIT_COOLERS,
     WALK_IN_UNIT_COOLERS_LEGACY,
     WALK_IN_UNIT_COOLERS_LEGACY_DICTIONARY,
+    REFRIGERATED_WAREHOUSE_UNIT_COOLERS_NEW,
+    REFRIGERATED_WAREHOUSE_UNIT_COOLERS_LEGACY,
     MAIN_MENU,
     META_GROUP,
     META_CATEGORY,
@@ -30,6 +34,7 @@ export enum ContentKind {
 
 export enum ContentDataType {
     TEXT,
+    TEXTAREA,
     INTEGER,
     FLOAT,
     SELECT,
@@ -80,56 +85,60 @@ export function generateDotCmsCsvRows(contentType: ContentType, products: Source
     }
 
     for (let productProperties of transformedProducts) {
-        // only keep known attributes and rename them to DotCMS attributes
-        const dotCmsContentEntry = {};
-        for (const [attributeName, attributeValue] of Object.entries(productProperties)) {
-            const attribute = contentType.attributes.find((attribute) => attribute.description === attributeName);
-            if (attribute) {
-                const value = convertAttributeValue(attribute, attributeValue);
-                // verify
-                if (value === undefined || value === null || value === "") {
-                    if (attribute.required) {
-                        console.log(productProperties);
-                        throw `${contentType.name}.${attribute.id}, is required, but value is null or undefined.`;
+        try {
+            // only keep known attributes and rename them to DotCMS attributes
+            const dotCmsContentEntry = {};
+            for (const [attributeName, attributeValue] of Object.entries(productProperties)) {
+                const attribute = contentType.attributes.find((attribute) => attribute.description === attributeName);
+                if (attribute) {
+                    const value = convertAttributeValue(attribute, attributeValue);
+                    // verify
+                    if (value === undefined || value === null || value === "") {
+                        if (attribute.required) {
+                            throw `${contentType.name}.${attribute.id}, is required, but value is null or undefined.`;
+                        }
+                        // } else if (typeof value === "string" && value.trim() === "") { // TODO: enable this rule again
+                        //         console.log(productProperties);
+                        //         throw `${contentType.name}.${attribute.id}, is empty string, but should be null.`;
+                    } else {
+                        const valueType = typeof value;
+                        const dataType = attribute.dataType || ContentDataType.TEXT;
+                        switch (dataType) {
+                            case ContentDataType.TEXT:
+                                if (valueType !== "string") {
+                                    throw `${contentType.name}.${attribute.id}, TEXT expected, found: ${attributeName} = ${value}: ${valueType}`;
+                                }
+                                break;
+                            case ContentDataType.INTEGER:
+                                if (!Number.isInteger(value)) {
+                                    throw `${contentType.name}.${attribute.id}, INTEGER expected, found: ${attributeName} = ${value}: ${valueType}`;
+                                }
+                                break;
+                            case ContentDataType.FLOAT:
+                                if (valueType !== "number") {
+                                    throw `${contentType.name}.${attribute.id}, FLOAT expected, found: ${attributeName} = ${value}: ${valueType}`;
+                                }
+                                break;
+                            case ContentDataType.SELECT:
+                                if (valueType !== "string") {
+                                    throw `${contentType.name}.${attribute.id}, SELECT expected, found: ${attributeName} = ${value}: ${valueType}`;
+                                }
+                                break;
+                            case ContentDataType.BOOLEAN:
+                                break;
+                            case ContentDataType.FILE:
+                                break;
+                        }
                     }
-                    // } else if (typeof value === "string" && value.trim() === "") { // TODO: enable this rule again
-                    //         console.log(productProperties);
-                    //         throw `${contentType.name}.${attribute.id}, is empty string, but should be null.`;
-                } else {
-                    const valueType = typeof value;
-                    const dataType = attribute.dataType || ContentDataType.TEXT;
-                    switch (dataType) {
-                        case ContentDataType.TEXT:
-                            if (valueType !== "string") {
-                                throw `${contentType.name}.${attribute.id}, TEXT expected, found: ${attributeName} = ${value}: ${valueType}`;
-                            }
-                            break;
-                        case ContentDataType.INTEGER:
-                            if (!Number.isInteger(value)) {
-                                throw `${contentType.name}.${attribute.id}, INTEGER expected, found: ${attributeName} = ${value}: ${valueType}`;
-                            }
-                            break;
-                        case ContentDataType.FLOAT:
-                            if (valueType !== "number") {
-                                throw `${contentType.name}.${attribute.id}, FLOAT expected, found: ${attributeName} = ${value}: ${valueType}`;
-                            }
-                            break;
-                        case ContentDataType.SELECT:
-                            if (valueType !== "string") {
-                                throw `${contentType.name}.${attribute.id}, SELECT expected, found: ${attributeName} = ${value}: ${valueType}`;
-                            }
-                            break;
-                        case ContentDataType.BOOLEAN:
-                            break;
-                        case ContentDataType.FILE:
-                            break;
-                    }
-                }
 
-                dotCmsContentEntry[attribute.id] = value;
+                    dotCmsContentEntry[attribute.id] = value;
+                }
             }
+            dotCmsContentEntries.push(dotCmsContentEntry);
+        } catch (ex) {
+            console.log(productProperties);
+            throw ex;
         }
-        dotCmsContentEntries.push(dotCmsContentEntry);
     }
     return dotCmsContentEntries;
 }
@@ -198,11 +207,11 @@ function createFields(contentType: ContentType, csvRows: any[]) {
             "fixed": false,
             "id": uuid(`${contentType.name} ${attribute.id}`, ATTRIBUTE_UUID_NAMESPACE),
             "indexed": attribute.indexed || false,
-            "listed": attribute.listed || true,
+            "listed": attribute.listed === undefined ? true : attribute.listed,
             "name": attribute.description,
             "readOnly": false,
             "required": attribute.required || false,
-            "searchable": attribute.listed || true,
+            "searchable": attribute.listed === undefined ? true : attribute.listed,
             "sortOrder": sortOrder++,
             "unique": attribute.unique || false,
             "variable": attribute.id,
@@ -223,8 +232,10 @@ function determineClazz(dataType: ContentDataType) {
             return 'com.dotcms.contenttype.model.field.ImmutableSelectField';
         case ContentDataType.FILE:
             return 'com.dotcms.contenttype.model.field.ImmutableFileField';
+        case ContentDataType.TEXTAREA:
+            return 'com.dotcms.contenttype.model.field.ImmutableTextAreaField';
         default:
-            throw `Unsupported dataType: ${dataType}`;
+            throw new Error(`Unsupported dataType: ${dataType}`);
     }
 }
 
@@ -240,8 +251,10 @@ function determineFieldType(dataType: ContentDataType) {
             return 'Checkbox';
         case ContentDataType.FILE:
             return 'File';
+        case ContentDataType.TEXTAREA:
+            return 'Textarea';
         default:
-            throw `Unsupported dataType: ${dataType}`;
+            throw new Error(`Unsupported dataType: ${dataType}`);
     }
 }
 
@@ -256,8 +269,10 @@ function determineDataType(dataType: ContentDataType) {
             return 'INTEGER';
         case ContentDataType.FLOAT:
             return 'FLOAT';
+        case ContentDataType.TEXTAREA:
+            return 'LONG_TEXT';
         default:
-            throw `Unsupported dataType: ${dataType}`;
+            throw new Error(`Unsupported dataType: ${dataType}`);
     }
 }
 

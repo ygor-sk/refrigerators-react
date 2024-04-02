@@ -1,4 +1,4 @@
-import {Brand, Category, Group, Style} from "./product";
+import {Brand, Category, Group, Revision, Style} from "./product";
 
 export const brands: Brand[] = ["bohn", "larkin", "climate_control", "chandler"];
 
@@ -13,6 +13,7 @@ export interface FactoryOptionLegacy {
 export interface SourceProduct {
     productId: number,
     modelNumber: string,
+    revision: Revision,
     brand: Brand,
     group: Group,
     category: Category,
@@ -45,6 +46,7 @@ export interface SourceProduct {
 }
 
 export interface CapacityItem {
+    applicationType: string,
     inputConditions: {
         refrigerant: string,
     },

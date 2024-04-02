@@ -1,5 +1,4 @@
 import {ContentDataType, ContentKind, ContentType, dictionaryTransformation} from "./dotcms-writer";
-import {createCrossReferenceContentType, createShippedLooseDictionaryContentType} from "./dotcms-content-generic";
 import {
     FactoryOption,
     ReverseCycleKit,
@@ -8,18 +7,17 @@ import {
     WalkInNewExpansionValve,
     WalkInNewLiquidValve
 } from "heatcraft-js-shared/lib/source-product";
+import {createCrossReferenceContentType, createShippedLooseDictionaryContentType} from "./dotcms-content-util";
 
 // noinspection NonAsciiCharacters
 export const contentTypes: ContentType[] = [
     {
-        name: "ProductV7WalkInUnitCoolersNew",
+        name: "ProductX4WalkInUnitCoolersNew",
         contentKind: ContentKind.WALK_IN_UNIT_COOLERS_NEW,
         attributes: [
             {id: "productId", description: "productId", required: true, indexed: true, unique: true, dataType: ContentDataType.INTEGER},
             {id: "modelNumber", description: "modelNumber", required: true, indexed: true, unique: true},
             {id: "brand", description: "brand", required: true, dataType: ContentDataType.SELECT},
-            {id: "group", description: "group", required: true, dataType: ContentDataType.SELECT},
-            {id: "category", description: "category", required: true, dataType: ContentDataType.SELECT},
             {id: "style", description: "style", required: true, dataType: ContentDataType.SELECT},
             {id: "price", description: "List Price ($US)", dataType: ContentDataType.FLOAT},
             {id: "cfm", description: "CFM", dataType: ContentDataType.FLOAT},
@@ -34,9 +32,19 @@ export const contentTypes: ContentType[] = [
         ],
         contentTransformation: products =>
             products.map(product => {
-                const capacityItem = product.walkInUnitCoolers.capacity.filter(capacity =>
+                let capacityItem = product.walkInUnitCoolers.capacity.filter(capacity =>
                     capacity.inputConditions.refrigerant === "R-448A"
                 )[0];
+
+                if (!capacityItem && product.style === "medium_profile") {
+                    capacityItem = product.walkInUnitCoolers.capacity.filter(capacity =>
+                        capacity.inputConditions.refrigerant === "R-404A"
+                    )[0];
+                }
+
+                if (!capacityItem) {
+                    console.log(`Suitable capacity not found: ${product.modelNumber}`);
+                }
 
                 return {
                     ...product,
@@ -47,9 +55,10 @@ export const contentTypes: ContentType[] = [
                     ratingPoint: `${capacityItem.inputConditions.temperatureDifferenceF}°F TD ${capacityItem.inputConditions.saturatedSuctionTemperatureF}°F SST`
                 };
             })
+            // .filter(capacity => capacity !== null)
     },
     {
-        name: "ProductV7WalkInUnitCoolersNewDetails",
+        name: "ProductX4WalkInUnitCoolersNewDetails",
         contentKind: ContentKind.WALK_IN_UNIT_COOLERS_NEW,
         attributes: [
             {id: "productId", description: "productId", required: true, indexed: true, unique: true, dataType: ContentDataType.INTEGER},
@@ -59,16 +68,22 @@ export const contentTypes: ContentType[] = [
             {id: "depthIn", description: "Depth (in.)", dataType: ContentDataType.FLOAT},
             {id: "lengthIn", description: "Length (In.)", dataType: ContentDataType.FLOAT},
             {id: "estNetWeightLbs", description: "Est. Net Weight (lbs.)", dataType: ContentDataType.FLOAT},
-            {id: "coilInletOd", description: "Coil Inlet OD"},
-            {id: "suctionOd", description: "Suction OD"},
+            {id: "coilInletOd", description: "Coil Inlet OD", dataType: ContentDataType.FLOAT},
+            {id: "suctionOd", description: "Suction OD", dataType: ContentDataType.FLOAT},
             {id: "externalEqualizedOd", description: "External Equalizer OD", dataType: ContentDataType.FLOAT},
             {id: "drainMpt", description: "Drain MPT", dataType: ContentDataType.FLOAT},
             {id: "sidePortOd", description: "Side Port OD", dataType: ContentDataType.FLOAT},
             {id: "hotGasPanConnsOd", description: "Hot Gas Pan Conns.OD", dataType: ContentDataType.FLOAT},
+            {id: "fanDiameterIn", description: "Fan Diameter (in)", dataType: ContentDataType.INTEGER},
+            {id: "fanDiameterMm", description: "Fan Diameter (mm)", dataType: ContentDataType.INTEGER},
+            {id: "aitThrowStandardFt", description: "Air Throw - Standard (ft)", dataType: ContentDataType.INTEGER},
+            {id: "aitThrowStandardM", description: "Air Throw - Standard (m)", dataType: ContentDataType.FLOAT},
+            {id: "aitThrowWithCollarFt", description: "Air Throw - With Collar (ft)", dataType: ContentDataType.INTEGER},
+            {id: "aitThrowWithCollarM", description: "Air Throw - With Collar (m)", dataType: ContentDataType.FLOAT},
         ]
     },
     {
-        name: "ProductV7WalkInUnitCoolersNewElectrical",
+        name: "ProductX4WalkInUnitCoolersNewElectrical",
         contentKind: ContentKind.WALK_IN_UNIT_COOLERS_NEW,
         attributes: [
             {id: "productId", description: "productId", required: true, indexed: true, unique: true, dataType: ContentDataType.INTEGER},
@@ -92,7 +107,7 @@ export const contentTypes: ContentType[] = [
         ]
     },
     {
-        name: "ProductV7WalkInUnitCoolersNewDictionaryRefs",
+        name: "ProductX4WalkInUnitCoolersNewDictionaryRefs",
         contentKind: ContentKind.WALK_IN_UNIT_COOLERS_NEW,
         attributes: [
             {id: "productId", description: "productId", required: true, indexed: true, unique: true, dataType: ContentDataType.INTEGER},
@@ -124,10 +139,11 @@ export const contentTypes: ContentType[] = [
         }
     },
     {
-        name: "ProductV7WalkInUnitCoolersNewCapacityDictionary",
+        name: "ProductX4WalkInUnitCoolersNewCapacityDictionary",
         contentKind: ContentKind.WALK_IN_UNIT_COOLERS_NEW_DICTIONARY,
         attributes: [
             {id: "refId", description: "refId", required: true, indexed: true, unique: false, dataType: ContentDataType.INTEGER},
+            {id: "applicationType", description: "Application", required: true, dataType: ContentDataType.SELECT},
             {id: "refrigerant", description: "Refrigerant", required: true, dataType: ContentDataType.SELECT},
             {id: "temperatureDifferenceF", description: "Temperature difference (°F)", required: true, dataType: ContentDataType.INTEGER},
             {id: "saturatedSuctionTemperatureF", description: "Saturated Suction Temperature (°F)", required: true, dataType: ContentDataType.INTEGER},
@@ -136,6 +152,7 @@ export const contentTypes: ContentType[] = [
             {id: "doeCompliance", description: "DOE Compliance", dataType: ContentDataType.BOOLEAN},
         ],
         contentTransformation: dictionaryTransformation<WalkIn3NewCapacityItem>("capacity", capacity => ({
+            "Application": capacity.applicationType,
             "Refrigerant": capacity.inputConditions.refrigerant,
             "Temperature difference (°F)": capacity.inputConditions.temperatureDifferenceF,
             "Saturated Suction Temperature (°F)": capacity.inputConditions.saturatedSuctionTemperatureF,
@@ -145,7 +162,7 @@ export const contentTypes: ContentType[] = [
         })),
     },
     {
-        name: "ProductV7WalkInUnitCoolersNewPreferredOptionsDictionary",
+        name: "ProductX4WalkInUnitCoolersNewPreferredOptionsDictionary",
         contentKind: ContentKind.WALK_IN_UNIT_COOLERS_NEW_DICTIONARY,
         attributes: [
             {id: "refId", description: "refId", required: true, indexed: true, unique: false, dataType: ContentDataType.INTEGER},
@@ -164,7 +181,7 @@ export const contentTypes: ContentType[] = [
         })),
     },
     {
-        name: "ProductV7WalkInUnitCoolersNewAlaCarteOptionsDictionary",
+        name: "ProductX4WalkInUnitCoolersNewAlaCarteOptionsDictionary",
         contentKind: ContentKind.WALK_IN_UNIT_COOLERS_NEW_DICTIONARY,
         attributes: [
             {id: "refId", description: "refId", required: true, indexed: true, unique: false, dataType: ContentDataType.INTEGER},
@@ -183,7 +200,7 @@ export const contentTypes: ContentType[] = [
         })),
     },
     {
-        name: "ProductV7WalkInUnitCoolersNewExpansionValvesDictionary",
+        name: "ProductX4WalkInUnitCoolersNewExpansionValvesDictionary",
         contentKind: ContentKind.WALK_IN_UNIT_COOLERS_NEW_DICTIONARY,
         attributes: [
             {id: "refId", description: "refId", required: true, indexed: true, unique: false, dataType: ContentDataType.INTEGER},
@@ -197,7 +214,7 @@ export const contentTypes: ContentType[] = [
         })),
     },
     {
-        name: "ProductV7WalkInUnitCoolersNewLiquidValvesDictionary",
+        name: "ProductX4WalkInUnitCoolersNewLiquidValvesDictionary",
         contentKind: ContentKind.WALK_IN_UNIT_COOLERS_NEW_DICTIONARY,
         attributes: [
             {id: "refId", description: "refId", required: true, indexed: true, unique: false, dataType: ContentDataType.INTEGER},
@@ -211,9 +228,9 @@ export const contentTypes: ContentType[] = [
             "List Price ($US)": valve.price,
         })),
     },
-    createShippedLooseDictionaryContentType("ProductV7WalkInUnitCoolersNewShippedLooseDictionary", ContentKind.WALK_IN_UNIT_COOLERS_NEW_DICTIONARY),
+    createShippedLooseDictionaryContentType("ProductX4WalkInUnitCoolersNewShippedLooseDictionary", ContentKind.WALK_IN_UNIT_COOLERS_NEW_DICTIONARY),
     {
-        name: "ProductV7WalkInUnitCoolersNewReverseCycleKitsDictionary",
+        name: "ProductX4WalkInUnitCoolersNewReverseCycleKitsDictionary",
         contentKind: ContentKind.WALK_IN_UNIT_COOLERS_NEW_DICTIONARY,
         attributes: [
             {id: "refId", description: "refId", required: true, indexed: true, unique: false, dataType: ContentDataType.INTEGER},
@@ -227,5 +244,5 @@ export const contentTypes: ContentType[] = [
             "List Price ($US)": valve.price,
         })),
     },
-    createCrossReferenceContentType("ProductV7WalkInUnitCoolersNewCrossReference", ContentKind.WALK_IN_UNIT_COOLERS_NEW),
+    createCrossReferenceContentType("ProductX4WalkInUnitCoolersNewCrossReference", ContentKind.WALK_IN_UNIT_COOLERS_NEW),
 ];

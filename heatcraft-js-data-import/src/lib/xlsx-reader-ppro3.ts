@@ -59,6 +59,7 @@ function collectAttributes(products: { [p: string]: SourceProduct }, brand: Bran
                         brand: brand,
                         group: 'compressorized',
                         category: 'pro3_packaged',
+                        revision: "NEW",
                         style: 'top_mount',
                         pro3Packaged: {
                             capacity: [],
@@ -86,6 +87,7 @@ function collectAttributes(products: { [p: string]: SourceProduct }, brand: Bran
                         };
                         if (!_.some(product.pro3Packaged.capacity, (capacity => _.isEqual(capacity.inputConditions, inputConditions)))) {
                             product.pro3Packaged.capacity.push({
+                                applicationType: productVariation['Application'],
                                 inputConditions: inputConditions,
                                 outputProperties: {
                                     capacityBTUH: capacity,
@@ -142,7 +144,7 @@ interface Pro3PackagedProducts {
 
 function createCapacityDictionarySourceProduct(data: any[], idx: number): SourceProduct {
     return {
-        productId: idx, modelNumber: null, brand: null, group: null, category: null, style: null,
+        productId: idx, modelNumber: null, brand: null, group: null, category: null, style: null, revision: null,
         dictionaryRef: {
             dictionaryId: "capacity", refId: idx, data: data
         }

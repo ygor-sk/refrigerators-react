@@ -5,7 +5,7 @@ import PromisePool from "es6-promise-pool";
 import _ from "lodash";
 import {DictionaryId, SourceProduct} from "heatcraft-js-shared/lib/source-product";
 
-export const MAX_BRAND_STYLE_PRODUCTS = 999999;
+export const MAX_BRAND_STYLE_PRODUCTS = 20;
 
 export async function saveFile(fileName: string, content: string) {
     let directory = path.dirname(fileName);
@@ -104,7 +104,7 @@ export function calculateRefId(dictionary: any[], needle: any) {
 
 export function createDictionarySourceProduct(idx: number, dictionaryId: DictionaryId, data: any[]): SourceProduct {
     return {
-        productId: idx, modelNumber: null, brand: null, group: null, category: null, style: null,
+        productId: idx, modelNumber: null, brand: null, group: null, category: null, style: null, revision: null,
         dictionaryRef: {
             dictionaryId: dictionaryId, refId: idx, data: data
         }

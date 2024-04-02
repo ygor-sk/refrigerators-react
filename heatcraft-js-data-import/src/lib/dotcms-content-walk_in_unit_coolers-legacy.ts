@@ -1,22 +1,20 @@
 import {ContentDataType, ContentKind, ContentType, dictionaryTransformation} from "./dotcms-writer";
-import {createShippedLooseDictionaryContentType} from "./dotcms-content-generic";
 import {
     FactoryOptionLegacy,
     SourceProduct,
     WalkInLegacyExpansionValve,
     WalkInLegacyLiquidValve
 } from "heatcraft-js-shared/lib/source-product";
+import {createShippedLooseDictionaryContentType} from "./dotcms-content-util";
 
 export const contentTypes: ContentType[] = [
     {
-        name: "ProductV7WalkInUnitCoolersLegacy",
+        name: "ProductX4WalkInUnitCoolersLegacy",
         contentKind: ContentKind.WALK_IN_UNIT_COOLERS_LEGACY,
         attributes: [
             {id: "productId", description: "productId", required: true, indexed: true, unique: true, dataType: ContentDataType.INTEGER},
             {id: "modelNumber", description: "modelNumber", required: true, indexed: true, unique: true},
             {id: "brand", description: "brand", required: true, dataType: ContentDataType.SELECT},
-            {id: "group", description: "group", required: true, dataType: ContentDataType.SELECT},
-            {id: "category", description: "category", required: true, dataType: ContentDataType.SELECT},
             {id: "style", description: "style", required: true, dataType: ContentDataType.SELECT},
             {id: "standardModel", description: "standardModel"},
             {id: "configModel", description: "configModel"},
@@ -38,7 +36,7 @@ export const contentTypes: ContentType[] = [
             ))
     },
     {
-        name: "ProductV7WalkInUnitCoolersLegacyDetails",
+        name: "ProductX4WalkInUnitCoolersLegacyDetails",
         contentKind: ContentKind.WALK_IN_UNIT_COOLERS_LEGACY,
         attributes: [
             {id: "productId", description: "productId", required: true, indexed: true, unique: true, dataType: ContentDataType.INTEGER},
@@ -62,7 +60,7 @@ export const contentTypes: ContentType[] = [
         ]
     },
     {
-        name: "ProductV7WalkInUnitCoolersLegacyElectrical",
+        name: "ProductX4WalkInUnitCoolersLegacyElectrical",
         contentKind: ContentKind.WALK_IN_UNIT_COOLERS_LEGACY,
         attributes: [
             {id: "productId", description: "productId", required: true, indexed: true, unique: true, dataType: ContentDataType.INTEGER},
@@ -81,7 +79,7 @@ export const contentTypes: ContentType[] = [
         ]
     },
     {
-        name: "ProductV7WalkInUnitCoolersLegacyDictionaryRefs",
+        name: "ProductX4WalkInUnitCoolersLegacyDictionaryRefs",
         contentKind: ContentKind.WALK_IN_UNIT_COOLERS_LEGACY,
         attributes: [
             {id: "productId", description: "productId", required: true, indexed: true, unique: true, dataType: ContentDataType.INTEGER},
@@ -107,7 +105,7 @@ export const contentTypes: ContentType[] = [
         }
     },
     {
-        name: "ProductV7WalkInUnitCoolersLegacyAlaCarteOptionsDictionary",
+        name: "ProductX4WalkInUnitCoolersLegacyAlaCarteOptionsDictionary",
         contentKind: ContentKind.WALK_IN_UNIT_COOLERS_LEGACY_DICTIONARY,
         attributes: [
             {id: "refId", description: "refId", required: true, indexed: true, unique: false, dataType: ContentDataType.INTEGER},
@@ -126,7 +124,7 @@ export const contentTypes: ContentType[] = [
         })),
     },
     {
-        name: "ProductV7WalkInUnitCoolersLegacyExpansionValvesDictionary",
+        name: "ProductX4WalkInUnitCoolersLegacyExpansionValvesDictionary",
         contentKind: ContentKind.WALK_IN_UNIT_COOLERS_LEGACY_DICTIONARY,
         attributes: [
             {id: "refId", description: "refId", required: true, indexed: true, unique: false, dataType: ContentDataType.INTEGER},
@@ -141,7 +139,7 @@ export const contentTypes: ContentType[] = [
         })),
     },
     {
-        name: "ProductV7WalkInUnitCoolersLegacyLiquidValvesDictionary",
+        name: "ProductX4WalkInUnitCoolersLegacyLiquidValvesDictionary",
         contentKind: ContentKind.WALK_IN_UNIT_COOLERS_LEGACY_DICTIONARY,
         attributes: [
             {id: "refId", description: "refId", required: true, indexed: true, unique: false, dataType: ContentDataType.INTEGER},
@@ -159,5 +157,5 @@ export const contentTypes: ContentType[] = [
             "List Price ($US)": valve.price,
         })),
     },
-    createShippedLooseDictionaryContentType("ProductV7WalkInUnitCoolersLegacyShippedLooseDictionary", ContentKind.WALK_IN_UNIT_COOLERS_LEGACY_DICTIONARY),
+    createShippedLooseDictionaryContentType("ProductX4WalkInUnitCoolersLegacyShippedLooseDictionary", ContentKind.WALK_IN_UNIT_COOLERS_LEGACY_DICTIONARY),
 ];

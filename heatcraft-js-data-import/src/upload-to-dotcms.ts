@@ -33,20 +33,20 @@ async function main() {
 
         console.log(contentProducts.length);
         let chunkIndex = 0;
-        for (const chunk of _.chunk(contentProducts, 30000)) {
-            console.log(`Uploading ${contentType.name}, chunk index: ${chunkIndex++}, chunk size: ${chunk.length}, total count: ${contentProducts.length}`);
-            let payload = {
-                contentTypeId: contentTypeId(contentType),
-                items: chunk
-            };
-            console.log(chunk.length);
-            await dotCmsAxios
-                .post(`/api/heatcraft/import`, payload)
-                .then(() => console.log(`Uploaded ${contentType.name}, count: ${contentProducts.length}`))
-                .catch((error) => {
-                    console.log(`Error uploading ${contentType.name}, count: ${contentProducts.length}. Error: ${error}`);
-                });
-        }
+        // for (const chunk of _.chunk(contentProducts, 1000)) {
+        //     console.log(`Uploading ${contentType.name}, chunk index: ${chunkIndex++}, chunk size: ${chunk.length}, total count: ${contentProducts.length}`);
+        //     let payload = {
+        //         contentTypeId: contentTypeId(contentType),
+        //         items: chunk
+        //     };
+        //     console.log(chunk.length);
+        //     await dotCmsAxios
+        //         .post(`/api/heatcraft/import`, payload)
+        //         .then(() => console.log(`Uploaded ${contentType.name}, count: ${contentProducts.length}`))
+        //         .catch((error) => {
+        //             console.log(`Error uploading ${contentType.name}, count: ${contentProducts.length}. Error: ${error}`);
+        //         });
+        // }
     }
 }
 main().then(() => console.log('All done !')).catch((error) => console.log({error}));

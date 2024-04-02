@@ -14,7 +14,7 @@ async function main() {
             const sourceProducts = collectContentTypeProducts(contentType, productGroups);
             const csvRows = dotcms.generateDotCmsCsvRows(contentType, sourceProducts);
 
-            const ws = wb.addWorksheet(contentType.name.replace("ProductV7", ""));
+            const ws = wb.addWorksheet(contentType.name.replace("ProductX4", ""));
             ["ID", "Description", "Data type", "Enum", "Unique", "Required"].forEach((attr, idx) => {
                 ws.cell(1, idx + 1).string(attr).style(headerStyle);
             })

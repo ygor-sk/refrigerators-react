@@ -1,37 +1,44 @@
-import {AttributeType, Category} from "../../../heatcraft-js-shared/lib/product";
+import {AttributeType, Brand, Category, Group, Style} from "../../../heatcraft-js-shared/lib/product";
+import {DocumentId} from "../../../heatcraft-js-shared/lib/site";
 
-export interface NamedIdentifier {
-    id: string,
+export interface NamedIdentifier<T> {
+    id: T,
     title: string,
 }
 
-export const initialGroups: NamedIdentifier[] = [
+export const initialGroups: NamedIdentifier<Group>[] = [
     {id: "compressorized", title: "Compressorized"},
     {id: "evaporators_unit_coolers", title: "Evaporators / Unit Coolers"},
 ];
 
-export const initialCategories: (NamedIdentifier & { groupId: string })[] = [
+export const initialCategories: (NamedIdentifier<Category> & { groupId: Group })[] = [
     {id: "pro3_packaged", title: "PRO3 Packaged Systems", groupId: "compressorized"},
     {id: "walk_in_unit_coolers", title: "Walk-In Unit Coolers", groupId: "evaporators_unit_coolers"},
+    // {
+    //     id: "refrigerated_warehouse_unit_coolers",
+    //     title: "Refrigerated Warehouse Unit Coolers",
+    //     groupId: "evaporators_unit_coolers"
+    // },
 ];
 
-export const initialStyles: (NamedIdentifier & { categoryId: string })[] = [
+export const initialStyles: (NamedIdentifier<Style> & { categoryId: Category })[] = [
     {id: "top_mount", title: "Top Mount", categoryId: "pro3_packaged"},
     {id: "side_mount", title: "Side Mount", categoryId: "pro3_packaged"},
     {id: "low_profile", title: "Low Profile", categoryId: "walk_in_unit_coolers"},
     {id: "medium_profile", title: "Medium Profile", categoryId: "walk_in_unit_coolers"},
     {id: "center_mount", title: "Center Mount", categoryId: "walk_in_unit_coolers"},
     {id: "low_velocity_center_mount", title: "Low Velocity Center Mount", categoryId: "walk_in_unit_coolers"},
+    // {id: "Large_Unit_Coolers", title: "Large Unit Coolers", categoryId: "refrigerated_warehouse_unit_coolers"},
 ];
 
-export const initialBrands: NamedIdentifier[] = [
+export const initialBrands: NamedIdentifier<Brand>[] = [
     {id: "bohn", title: "Bohn"},
     {id: "larkin", title: "Larkin"},
     {id: "climate_control", title: "Climate Control"},
     {id: "chandler", title: "Chandler"},
 ];
 
-export const initialDocuments: NamedIdentifier[] = [
+export const initialDocuments: NamedIdentifier<DocumentId>[] = [
     {id: "installation_manual_indoor", title: "Installation & Operation Manual - Indoor"},
     {id: "installation_manual_outdoor", title: "Installation & Operation Manual - Outdoor"},
     {id: "technical_bulletin", title: "Technical Bulletin"},
@@ -66,30 +73,30 @@ export const initialCategoryAttributes: CategoryAttributeGroup[] = [
         category: "pro3_packaged",
         attributes: [{
             "categoryAttributeId": "productId",
-            "newContentType": "ProductV7Pro3PackagedNew",
+            "newContentType": "ProductX4Pro3PackagedNew",
             "newAttributeId": "productId",
-            "legacyContentType": "ProductV7Pro3PackagedLegacy",
+            "legacyContentType": "ProductX4Pro3PackagedLegacy",
             "legacyAttributeId": "productId",
-            "attributeType": "SIMPLE"
+            "attributeType": "INTEGER"
         }, {
             "categoryAttributeId": "modelNumber",
-            "newContentType": "ProductV7Pro3PackagedNew",
+            "newContentType": "ProductX4Pro3PackagedNew",
             "newAttributeId": "modelNumber",
-            "legacyContentType": "ProductV7Pro3PackagedLegacy",
+            "legacyContentType": "ProductX4Pro3PackagedLegacy",
             "legacyAttributeId": "modelNumber",
             "attributeType": "SIMPLE"
         }, {
             "categoryAttributeId": "brand",
-            "newContentType": "ProductV7Pro3PackagedNew",
+            "newContentType": "ProductX4Pro3PackagedNew",
             "newAttributeId": "brand",
-            "legacyContentType": "ProductV7Pro3PackagedLegacy",
+            "legacyContentType": "ProductX4Pro3PackagedLegacy",
             "legacyAttributeId": "brand",
             "attributeType": "SIMPLE"
         }, {
             "categoryAttributeId": "style",
-            "newContentType": "ProductV7Pro3PackagedNew",
+            "newContentType": "ProductX4Pro3PackagedNew",
             "newAttributeId": "style",
-            "legacyContentType": "ProductV7Pro3PackagedLegacy",
+            "legacyContentType": "ProductX4Pro3PackagedLegacy",
             "legacyAttributeId": "style",
             "attributeType": "SIMPLE"
         }, {
@@ -101,72 +108,79 @@ export const initialCategoryAttributes: CategoryAttributeGroup[] = [
             "attributeType": "SIMPLE"
         }, {
             "categoryAttributeId": "price",
-            "newContentType": "ProductV7Pro3PackagedNew",
+            "newContentType": "ProductX4Pro3PackagedNew",
             "newAttributeId": "price",
-            "legacyContentType": "ProductV7Pro3PackagedLegacy",
+            "legacyContentType": "ProductX4Pro3PackagedLegacy",
             "legacyAttributeId": "price",
             "attributeType": "MONEY"
         }, {
             "categoryAttributeId": "applicationType",
-            "newContentType": "ProductV7Pro3PackagedNew",
+            "newContentType": "ProductX4Pro3PackagedNew",
             "newAttributeId": "applicationType",
-            "legacyContentType": "ProductV7Pro3PackagedLegacy",
+            "legacyContentType": "ProductX4Pro3PackagedLegacy",
             "legacyAttributeId": "applicationType",
             "attributeType": "SIMPLE"
         }, {
+            "categoryAttributeId": "shippingLengthIn",
+            "newContentType": "ProductX4Pro3PackagedNewDetails",
+            "newAttributeId": "shippingLengthIn",
+            "legacyContentType": "NullContentType",
+            "legacyAttributeId": "NullContentType",
+            "attributeType": "FRACTION"
+        }, {
             "categoryAttributeId": "applicationLocation",
-            "newContentType": "ProductV7Pro3PackagedNew",
+            "newContentType": "ProductX4Pro3PackagedNew",
             "newAttributeId": "applicationLocation",
-            "legacyContentType": "ProductV7Pro3PackagedLegacy",
+            "legacyContentType": "ProductX4Pro3PackagedLegacy",
             "legacyAttributeId": "applicationLocation",
             "attributeType": "SIMPLE"
         }, {
             "categoryAttributeId": "cabinetSize",
-            "newContentType": "ProductV7Pro3PackagedNewDetails",
+            "newContentType": "ProductX4Pro3PackagedNewDetails",
             "newAttributeId": "cabinetSize",
-            "legacyContentType": "ProductV7Pro3PackagedLegacy",
+            "legacyContentType": "ProductX4Pro3PackagedLegacy",
             "legacyAttributeId": "cabinetSize",
             "attributeType": "SIMPLE"
         }, {
             "categoryAttributeId": "defrostType",
-            "newContentType": "ProductV7Pro3PackagedNew",
+            "newContentType": "ProductX4Pro3PackagedNew",
             "newAttributeId": "defrostType",
-            "legacyContentType": "ProductV7Pro3PackagedLegacy",
+            "legacyContentType": "ProductX4Pro3PackagedLegacy",
             "legacyAttributeId": "defrostType",
             "attributeType": "SIMPLE"
         }, {
             "categoryAttributeId": "unitVoltage",
-            "newContentType": "ProductV7Pro3PackagedNewDetails",
+            "newContentType": "ProductX4Pro3PackagedNewDetails",
             "newAttributeId": "unitVoltage",
-            "legacyContentType": "ProductV7Pro3PackagedLegacy",
+            "legacyContentType": "ProductX4Pro3PackagedLegacy",
             "legacyAttributeId": "unitVoltage",
             "attributeType": "SIMPLE"
         }, {
             "categoryAttributeId": "operatingRange",
-            "newContentType": "ProductV7Pro3PackagedNew",
+            "newContentType": "ProductX4Pro3PackagedNew",
             "newAttributeId": "operatingRange",
-            "legacyContentType": "ProductV7Pro3PackagedLegacy",
+            "legacyContentType": "ProductX4Pro3PackagedLegacy",
             "legacyAttributeId": "operatingRange",
             "attributeType": "SIMPLE"
         }, {
             "categoryAttributeId": "motorType",
-            "newContentType": "ProductV7Pro3PackagedNewDetails",
+            "newContentType": "ProductX4Pro3PackagedNewDetails",
             "newAttributeId": "motorType",
-            "legacyContentType": "ProductV7Pro3PackagedLegacy",
+            "legacyContentType": "ProductX4Pro3PackagedLegacy",
             "legacyAttributeId": "motorType",
             "attributeType": "SIMPLE"
         }, {
             "categoryAttributeId": "refrigerant",
-            "newContentType": "ProductV7Pro3PackagedNew",
+            "newContentType": "ProductX4Pro3PackagedNew",
             "newAttributeId": "refrigerant",
-            "legacyContentType": "ProductV7Pro3PackagedLegacy",
+            "legacyContentType": "ProductX4Pro3PackagedLegacy",
             "legacyAttributeId": "refrigerant",
             "attributeType": "SIMPLE"
         }, {
             "categoryAttributeId": "capacity",
-            "newContentType": "ProductV7Pro3PackagedNew",
+            "newContentType": "ProductX4Pro3PackagedNew",
             "newAttributeId": "capacity",
-            "legacyContentType": "ProductV7Pro3PackagedLegacyDetails",
+            "legacyContentType": "ProductX4Pro3PackagedLegacyDetails",
             "legacyAttributeId": "capacity",
             "attributeType": "INTEGER"
         }]
@@ -175,37 +189,23 @@ export const initialCategoryAttributes: CategoryAttributeGroup[] = [
         category: "walk_in_unit_coolers",
         attributes: [{
             "categoryAttributeId": "productId",
-            "newContentType": "ProductV7WalkInUnitCoolersNew",
+            "newContentType": "ProductX4WalkInUnitCoolersNew",
             "newAttributeId": "productId",
-            "legacyContentType": "ProductV7WalkInUnitCoolersLegacy",
+            "legacyContentType": "ProductX4WalkInUnitCoolersLegacy",
             "legacyAttributeId": "productId",
-            "attributeType": "SIMPLE"
+            "attributeType": "INTEGER"
         }, {
             "categoryAttributeId": "modelNumber",
-            "newContentType": "ProductV7WalkInUnitCoolersNew",
+            "newContentType": "ProductX4WalkInUnitCoolersNew",
             "newAttributeId": "modelNumber",
-            "legacyContentType": "ProductV7WalkInUnitCoolersLegacy",
+            "legacyContentType": "ProductX4WalkInUnitCoolersLegacy",
             "legacyAttributeId": "modelNumber",
             "attributeType": "SIMPLE"
         }, {
-            "categoryAttributeId": "group",
-            "newContentType": "ProductV7WalkInUnitCoolersNew",
-            "newAttributeId": "group",
-            "legacyContentType": "ProductV7WalkInUnitCoolersLegacy",
-            "legacyAttributeId": "group",
-            "attributeType": "SIMPLE"
-        }, {
-            "categoryAttributeId": "category",
-            "newContentType": "ProductV7WalkInUnitCoolersNew",
-            "newAttributeId": "category",
-            "legacyContentType": "ProductV7WalkInUnitCoolersLegacy",
-            "legacyAttributeId": "category",
-            "attributeType": "SIMPLE"
-        }, {
             "categoryAttributeId": "style",
-            "newContentType": "ProductV7WalkInUnitCoolersNew",
+            "newContentType": "ProductX4WalkInUnitCoolersNew",
             "newAttributeId": "style",
-            "legacyContentType": "ProductV7WalkInUnitCoolersLegacy",
+            "legacyContentType": "ProductX4WalkInUnitCoolersLegacy",
             "legacyAttributeId": "style",
             "attributeType": "SIMPLE"
         }, {
@@ -217,202 +217,297 @@ export const initialCategoryAttributes: CategoryAttributeGroup[] = [
             "attributeType": "SIMPLE"
         }, {
             "categoryAttributeId": "brand",
-            "newContentType": "ProductV7WalkInUnitCoolersNew",
+            "newContentType": "ProductX4WalkInUnitCoolersNew",
             "newAttributeId": "brand",
-            "legacyContentType": "ProductV7WalkInUnitCoolersLegacy",
+            "legacyContentType": "ProductX4WalkInUnitCoolersLegacy",
             "legacyAttributeId": "brand",
             "attributeType": "SIMPLE"
         }, {
             "categoryAttributeId": "price",
-            "newContentType": "ProductV7WalkInUnitCoolersNew",
+            "newContentType": "ProductX4WalkInUnitCoolersNew",
             "newAttributeId": "price",
-            "legacyContentType": "ProductV7WalkInUnitCoolersLegacy",
+            "legacyContentType": "ProductX4WalkInUnitCoolersLegacy",
             "legacyAttributeId": "price",
             "attributeType": "MONEY"
         }, {
             "categoryAttributeId": "applicationType",
-            "newContentType": "ProductV7WalkInUnitCoolersNew",
+            "newContentType": "ProductX4WalkInUnitCoolersNew",
             "newAttributeId": "applicationType",
             "legacyContentType": "NullContentType",
             "legacyAttributeId": "NullContentType",
             "attributeType": "SIMPLE"
         }, {
             "categoryAttributeId": "defrostType",
-            "newContentType": "ProductV7WalkInUnitCoolersNew",
+            "newContentType": "ProductX4WalkInUnitCoolersNew",
             "newAttributeId": "defrostType",
-            "legacyContentType": "ProductV7WalkInUnitCoolersLegacy",
+            "legacyContentType": "ProductX4WalkInUnitCoolersLegacy",
             "legacyAttributeId": "defrostType",
             "attributeType": "SIMPLE"
         }, {
             "categoryAttributeId": "ratingPoint",
-            "newContentType": "ProductV7WalkInUnitCoolersNew",
+            "newContentType": "ProductX4WalkInUnitCoolersNew",
             "newAttributeId": "ratingPoint",
-            "legacyContentType": "ProductV7WalkInUnitCoolersLegacyDetails",
+            "legacyContentType": "ProductX4WalkInUnitCoolersLegacyDetails",
             "legacyAttributeId": "ratingPoint",
             "attributeType": "SIMPLE"
         }, {
             "categoryAttributeId": "fpi",
-            "newContentType": "ProductV7WalkInUnitCoolersNew",
+            "newContentType": "ProductX4WalkInUnitCoolersNew",
             "newAttributeId": "fpi",
-            "legacyContentType": "ProductV7WalkInUnitCoolersLegacy",
+            "legacyContentType": "ProductX4WalkInUnitCoolersLegacy",
             "legacyAttributeId": "fpi",
             "attributeType": "INTEGER"
         }, {
             "categoryAttributeId": "cfm",
-            "newContentType": "ProductV7WalkInUnitCoolersNew",
+            "newContentType": "ProductX4WalkInUnitCoolersNew",
             "newAttributeId": "cfm",
-            "legacyContentType": "ProductV7WalkInUnitCoolersLegacyDetails",
+            "legacyContentType": "ProductX4WalkInUnitCoolersLegacyDetails",
             "legacyAttributeId": "cfm",
             "attributeType": "INTEGER"
         }, {
             "categoryAttributeId": "refrigerant",
-            "newContentType": "ProductV7WalkInUnitCoolersNew",
+            "newContentType": "ProductX4WalkInUnitCoolersNew",
             "newAttributeId": "refrigerant",
             "legacyContentType": "ConstantContentType",
             "legacyAttributeId": "R-448A",
             "attributeType": "SIMPLE"
         }, {
             "categoryAttributeId": "compliance",
-            "newContentType": "ProductV7WalkInUnitCoolersNew",
+            "newContentType": "ProductX4WalkInUnitCoolersNew",
             "newAttributeId": "doeCompliance",
             "legacyContentType": "NullContentType",
             "legacyAttributeId": "NullContentType",
             "attributeType": "BOOLEAN"
         }, {
             "categoryAttributeId": "awef",
-            "newContentType": "ProductV7WalkInUnitCoolersNew",
+            "newContentType": "ProductX4WalkInUnitCoolersNew",
             "newAttributeId": "awef",
             "legacyContentType": "NullContentType",
             "legacyAttributeId": "NullContentType",
             "attributeType": "SIMPLE"
         }, {
             "categoryAttributeId": "capacity",
-            "newContentType": "ProductV7WalkInUnitCoolersNew",
+            "newContentType": "ProductX4WalkInUnitCoolersNew",
             "newAttributeId": "capacity",
-            "legacyContentType": "ProductV7WalkInUnitCoolersLegacyDetails",
+            "legacyContentType": "ProductX4WalkInUnitCoolersLegacyDetails",
             "legacyAttributeId": "capacity",
             "attributeType": "INTEGER"
         }, {
             "categoryAttributeId": "motorType",
-            "newContentType": "ProductV7WalkInUnitCoolersNewElectrical",
+            "newContentType": "ProductX4WalkInUnitCoolersNewElectrical",
             "newAttributeId": "motorType",
-            "legacyContentType": "ProductV7WalkInUnitCoolersLegacy",
+            "legacyContentType": "ProductX4WalkInUnitCoolersLegacy",
             "legacyAttributeId": "motorType",
             "attributeType": "SIMPLE"
         }, {
             "categoryAttributeId": "unitMca",
-            "newContentType": "ProductV7WalkInUnitCoolersNewElectrical",
+            "newContentType": "ProductX4WalkInUnitCoolersNewElectrical",
             "newAttributeId": "unitMca",
             "legacyContentType": "NullContentType",
             "legacyAttributeId": "NullContentType",
             "attributeType": "DECIMAL"
         }, {
             "categoryAttributeId": "unitMopd",
-            "newContentType": "ProductV7WalkInUnitCoolersNewElectrical",
+            "newContentType": "ProductX4WalkInUnitCoolersNewElectrical",
             "newAttributeId": "unitMopd",
             "legacyContentType": "NullContentType",
             "legacyAttributeId": "NullContentType",
             "attributeType": "INTEGER"
         }, {
             "categoryAttributeId": "depthIn",
-            "newContentType": "ProductV7WalkInUnitCoolersNewDetails",
+            "newContentType": "ProductX4WalkInUnitCoolersNewDetails",
             "newAttributeId": "depthIn",
-            "legacyContentType": "ProductV7WalkInUnitCoolersLegacyDetails",
+            "legacyContentType": "ProductX4WalkInUnitCoolersLegacyDetails",
             "legacyAttributeId": "depthIn",
             "attributeType": "FRACTION"
         }, {
             "categoryAttributeId": "heightIn",
-            "newContentType": "ProductV7WalkInUnitCoolersNewDetails",
+            "newContentType": "ProductX4WalkInUnitCoolersNewDetails",
             "newAttributeId": "heightIn",
-            "legacyContentType": "ProductV7WalkInUnitCoolersLegacyDetails",
+            "legacyContentType": "ProductX4WalkInUnitCoolersLegacyDetails",
             "legacyAttributeId": "heightIn",
             "attributeType": "FRACTION"
         }, {
             "categoryAttributeId": "lengthIn",
-            "newContentType": "ProductV7WalkInUnitCoolersNewDetails",
+            "newContentType": "ProductX4WalkInUnitCoolersNewDetails",
             "newAttributeId": "lengthIn",
-            "legacyContentType": "ProductV7WalkInUnitCoolersLegacyDetails",
+            "legacyContentType": "ProductX4WalkInUnitCoolersLegacyDetails",
             "legacyAttributeId": "lengthIn",
             "attributeType": "FRACTION"
         }, {
             "categoryAttributeId": "estNetWeightLbs",
-            "newContentType": "ProductV7WalkInUnitCoolersNewDetails",
+            "newContentType": "ProductX4WalkInUnitCoolersNewDetails",
             "newAttributeId": "estNetWeightLbs",
-            "legacyContentType": "ProductV7WalkInUnitCoolersLegacyDetails",
+            "legacyContentType": "ProductX4WalkInUnitCoolersLegacyDetails",
             "legacyAttributeId": "approxNetWeightLBS",
             "attributeType": "SIMPLE"
         }, {
             "categoryAttributeId": "motorHp",
-            "newContentType": "ProductV7WalkInUnitCoolersNewElectrical",
+            "newContentType": "ProductX4WalkInUnitCoolersNewElectrical",
             "newAttributeId": "motorHp",
-            "legacyContentType": "ProductV7WalkInUnitCoolersLegacyDetails",
+            "legacyContentType": "ProductX4WalkInUnitCoolersLegacyDetails",
             "legacyAttributeId": "motorHP",
             "attributeType": "SIMPLE"
         }, {
             "categoryAttributeId": "motorAmps",
-            "newContentType": "ProductV7WalkInUnitCoolersNewElectrical",
+            "newContentType": "ProductX4WalkInUnitCoolersNewElectrical",
             "newAttributeId": "motorAmps",
-            "legacyContentType": "ProductV7WalkInUnitCoolersLegacyElectrical",
+            "legacyContentType": "ProductX4WalkInUnitCoolersLegacyElectrical",
             "legacyAttributeId": "motorAmps",
             "attributeType": "DECIMAL"
         }, {
             "categoryAttributeId": "noOfFans",
-            "newContentType": "ProductV7WalkInUnitCoolersNewElectrical",
+            "newContentType": "ProductX4WalkInUnitCoolersNewElectrical",
             "newAttributeId": "noOfFans",
-            "legacyContentType": "ProductV7WalkInUnitCoolersLegacyElectrical",
+            "legacyContentType": "ProductX4WalkInUnitCoolersLegacyElectrical",
             "legacyAttributeId": "noOfFans",
             "attributeType": "INTEGER"
         }, {
             "categoryAttributeId": "motorWatts",
-            "newContentType": "ProductV7WalkInUnitCoolersNewElectrical",
+            "newContentType": "ProductX4WalkInUnitCoolersNewElectrical",
             "newAttributeId": "motorWatts",
-            "legacyContentType": "ProductV7WalkInUnitCoolersLegacyElectrical",
+            "legacyContentType": "ProductX4WalkInUnitCoolersLegacyElectrical",
             "legacyAttributeId": "motorWatts",
             "attributeType": "INTEGER"
         }, {
             "categoryAttributeId": "unitVoltage",
-            "newContentType": "ProductV7WalkInUnitCoolersNewElectrical",
+            "newContentType": "ProductX4WalkInUnitCoolersNewElectrical",
             "newAttributeId": "unitVoltage",
-            "legacyContentType": "ProductV7WalkInUnitCoolersLegacy",
+            "legacyContentType": "ProductX4WalkInUnitCoolersLegacy",
             "legacyAttributeId": "unitVoltage",
             "attributeType": "SIMPLE"
         }, {
             "categoryAttributeId": "motorVoltage",
-            "newContentType": "ProductV7WalkInUnitCoolersNewElectrical",
+            "newContentType": "ProductX4WalkInUnitCoolersNewElectrical",
             "newAttributeId": "motorVoltage",
-            "legacyContentType": "ProductV7WalkInUnitCoolersLegacyElectrical",
+            "legacyContentType": "ProductX4WalkInUnitCoolersLegacyElectrical",
             "legacyAttributeId": "motorVoltage",
             "attributeType": "SIMPLE"
         }, {
             "categoryAttributeId": "drainMpt",
-            "newContentType": "ProductV7WalkInUnitCoolersNewDetails",
+            "newContentType": "ProductX4WalkInUnitCoolersNewDetails",
             "newAttributeId": "drainMpt",
-            "legacyContentType": "ProductV7WalkInUnitCoolersLegacyDetails",
+            "legacyContentType": "ProductX4WalkInUnitCoolersLegacyDetails",
             "legacyAttributeId": "drainMPT",
             "attributeType": "FRACTION"
         }, {
             "categoryAttributeId": "suctionOd",
-            "newContentType": "ProductV7WalkInUnitCoolersNewDetails",
+            "newContentType": "ProductX4WalkInUnitCoolersNewDetails",
             "newAttributeId": "suctionOd",
-            "legacyContentType": "ProductV7WalkInUnitCoolersLegacyDetails",
+            "legacyContentType": "ProductX4WalkInUnitCoolersLegacyDetails",
             "legacyAttributeId": "suctionOD",
             "attributeType": "FRACTION"
         }, {
             "categoryAttributeId": "coilInletOD",
-            "newContentType": "ProductV7WalkInUnitCoolersNewDetails",
+            "newContentType": "ProductX4WalkInUnitCoolersNewDetails",
             "newAttributeId": "coilInletOD",
-            "legacyContentType": "ProductV7WalkInUnitCoolersLegacyDetails",
+            "legacyContentType": "ProductX4WalkInUnitCoolersLegacyDetails",
             "legacyAttributeId": "coilInletOD",
             "attributeType": "FRACTION"
         }, {
             "categoryAttributeId": "externalEqualizedOd",
-            "newContentType": "ProductV7WalkInUnitCoolersNewDetails",
+            "newContentType": "ProductX4WalkInUnitCoolersNewDetails",
             "newAttributeId": "externalEqualizedOd",
-            "legacyContentType": "ProductV7WalkInUnitCoolersLegacyDetails",
+            "legacyContentType": "ProductX4WalkInUnitCoolersLegacyDetails",
             "legacyAttributeId": "externalEqualizerOD",
             "attributeType": "FRACTION"
         }]
     },
+    // {
+    //     category: "refrigerated_warehouse_unit_coolers",
+    //     attributes: [{
+    //         "categoryAttributeId": "productId",
+    //         "newContentType": "ProductX4RefrigeratedWarehouseUnitCoolersNew",
+    //         "newAttributeId": "productId",
+    //         "legacyContentType": "ProductX4RefrigeratedWarehouseUnitCoolersLegacy",
+    //         "legacyAttributeId": "productId",
+    //         "attributeType": "INTEGER"
+    //     }, {
+    //         "categoryAttributeId": "modelNumber",
+    //         "newContentType": "ProductX4RefrigeratedWarehouseUnitCoolersNew",
+    //         "newAttributeId": "modelNumber",
+    //         "legacyContentType": "ProductX4RefrigeratedWarehouseUnitCoolersLegacy",
+    //         "legacyAttributeId": "modelNumber",
+    //         "attributeType": "SIMPLE"
+    //     }, {
+    //         "categoryAttributeId": "style",
+    //         "newContentType": "ProductX4RefrigeratedWarehouseUnitCoolersNew",
+    //         "newAttributeId": "style",
+    //         "legacyContentType": "ProductX4RefrigeratedWarehouseUnitCoolersLegacy",
+    //         "legacyAttributeId": "style",
+    //         "attributeType": "SIMPLE"
+    //     }, {
+    //         "categoryAttributeId": "revision",
+    //         "newContentType": "ConstantContentType",
+    //         "newAttributeId": "new",
+    //         "legacyContentType": "ConstantContentType",
+    //         "legacyAttributeId": "legacy",
+    //         "attributeType": "SIMPLE"
+    //     }, {
+    //         "categoryAttributeId": "brand",
+    //         "newContentType": "ProductX4RefrigeratedWarehouseUnitCoolersNew",
+    //         "newAttributeId": "brand",
+    //         "legacyContentType": "ProductX4RefrigeratedWarehouseUnitCoolersLegacy",
+    //         "legacyAttributeId": "brand",
+    //         "attributeType": "SIMPLE"
+    //     }, {
+    //         "categoryAttributeId": "price",
+    //         "newContentType": "ProductX4RefrigeratedWarehouseUnitCoolersNew",
+    //         "newAttributeId": "price",
+    //         "legacyContentType": "ProductX4RefrigeratedWarehouseUnitCoolersLegacy",
+    //         "legacyAttributeId": "price",
+    //         "attributeType": "MONEY"
+    //     }, {
+    //         "categoryAttributeId": "defrostType",
+    //         "newContentType": "ProductX4RefrigeratedWarehouseUnitCoolersNew",
+    //         "newAttributeId": "defrostType",
+    //         "legacyContentType": "ProductX4RefrigeratedWarehouseUnitCoolersLegacy",
+    //         "legacyAttributeId": "defrostType",
+    //         "attributeType": "SIMPLE"
+    //     }, {
+    //         "categoryAttributeId": "unitVoltage",
+    //         "newContentType": "ProductX4RefrigeratedWarehouseUnitCoolersNew",
+    //         "newAttributeId": "unitVoltage",
+    //         "legacyContentType": "ProductX4RefrigeratedWarehouseUnitCoolersLegacy",
+    //         "legacyAttributeId": "unitVoltage",
+    //         "attributeType": "SIMPLE"
+    //     }, {
+    //         "categoryAttributeId": "motorType",
+    //         "newContentType": "ProductX4RefrigeratedWarehouseUnitCoolersNew",
+    //         "newAttributeId": "motorType",
+    //         "legacyContentType": "ProductX4RefrigeratedWarehouseUnitCoolersLegacy",
+    //         "legacyAttributeId": "motorType",
+    //         "attributeType": "SIMPLE"
+    //     }, {
+    //         "categoryAttributeId": "fanDiameter",
+    //         "newContentType": "ProductX4RefrigeratedWarehouseUnitCoolersNew",
+    //         "newAttributeId": "fanDiameter",
+    //         "legacyContentType": "NullContentType",
+    //         "legacyAttributeId": "NullContentType",
+    //         "attributeType": "INTEGER"
+    //     }, {
+    //         "categoryAttributeId": "fpi",
+    //         "newContentType": "ProductX4RefrigeratedWarehouseUnitCoolersNew",
+    //         "newAttributeId": "fpi",
+    //         "legacyContentType": "ProductX4RefrigeratedWarehouseUnitCoolersLegacy",
+    //         "legacyAttributeId": "fpi",
+    //         "attributeType": "INTEGER"
+    //     }, {
+    //         "categoryAttributeId": "ratingPoint",
+    //         "newContentType": "ProductX4RefrigeratedWarehouseUnitCoolersNew",
+    //         "newAttributeId": "ratingPoint",
+    //         "legacyContentType": "ProductX4RefrigeratedWarehouseUnitCoolersLegacy",
+    //         "legacyAttributeId": "ratingPoint",
+    //         "attributeType": "SIMPLE"
+    //     }, {
+    //         "categoryAttributeId": "capacity",
+    //         "newContentType": "ProductX4RefrigeratedWarehouseUnitCoolersNew",
+    //         "newAttributeId": "capacity",
+    //         "legacyContentType": "ProductX4RefrigeratedWarehouseUnitCoolersLegacy",
+    //         "legacyAttributeId": "capacity",
+    //         "attributeType": "INTEGER"
+    //     },]
+    // },
 ];
 
 export interface ProductListAttributeGroup {
@@ -430,6 +525,7 @@ export const initialProductListAttributes: ProductListAttributeGroup[] = [
     {
         category: "pro3_packaged",
         attributes: [
+            {title: "Brand", categoryAttributeId: "brand", width: "10%"},
             {title: "New / Legacy", categoryAttributeId: "revision", width: "10%"},
             {title: "Model #", categoryAttributeId: "modelNumber", width: "10%"},
             {title: "List Price", categoryAttributeId: "price", width: "10%"},
@@ -444,6 +540,7 @@ export const initialProductListAttributes: ProductListAttributeGroup[] = [
     {
         category: "walk_in_unit_coolers",
         attributes: [
+            {title: "Brand", categoryAttributeId: "brand", width: "10%"},
             {title: "New / Legacy", categoryAttributeId: "revision", width: "10%"},
             {title: "Model #", categoryAttributeId: "modelNumber", width: "20%"},
             {title: "List Price", categoryAttributeId: "price", width: "11%"},
@@ -455,6 +552,22 @@ export const initialProductListAttributes: ProductListAttributeGroup[] = [
             {title: "CFM", categoryAttributeId: "cfm", width: "5%"},
         ]
     },
+    // {
+    //     category: "refrigerated_warehouse_unit_coolers",
+    //     attributes: [
+    //         {title: "Brand", categoryAttributeId: "brand", width: "10%"},
+    //         {title: "New / Legacy", categoryAttributeId: "revision", width: "10%"},
+    //         {title: "Model #", categoryAttributeId: "modelNumber", width: "20%"},
+    //         {title: "List Price", categoryAttributeId: "price", width: "11%"},
+    //         {title: "Defrost Type", categoryAttributeId: "defrostType", width: "13%"},
+    //         {title: "Voltage", categoryAttributeId: "unitVoltage", width: "12%"},
+    //         {title: "Motor Type", categoryAttributeId: "motorType", width: "15%"},
+    //         {title: "Fan Diameter", categoryAttributeId: "fanDiameter", width: "7%"},
+    //         {title: "FPI", categoryAttributeId: "fpi", width: "5%"},
+    //         {title: "Rating Point °F", categoryAttributeId: "ratingPoint", width: "15%"},
+    //         {title: "Capacity", categoryAttributeId: "capacity", width: "10%"},
+    //     ]
+    // },
 ];
 
 export interface ProductCompareAttributeGroup {
@@ -508,6 +621,19 @@ export const initialProductCompareAttributes: ProductCompareAttributeGroup[] = [
             {title: 'External Equalizer OD', categoryAttributeId: 'externalEqualizedOd'},
         ]
     },
+    // {
+    //     category: "refrigerated_warehouse_unit_coolers",
+    //     attributes: [
+    //         {title: "List Price", categoryAttributeId: "price"},
+    //         {title: "Defrost Type", categoryAttributeId: "defrostType"},
+    //         {title: "Voltage", categoryAttributeId: "unitVoltage"},
+    //         {title: "Motor Type", categoryAttributeId: "motorType"},
+    //         {title: "Fan Diameter", categoryAttributeId: "fanDiameter"},
+    //         {title: "FPI", categoryAttributeId: "fpi"},
+    //         {title: "Rating Point °F", categoryAttributeId: "ratingPoint"},
+    //         {title: "Capacity", categoryAttributeId: "capacity"},
+    //     ]
+    // },
 ];
 
 export interface CategoryRevision {
@@ -522,30 +648,61 @@ export interface ProductMetaV1Detail {
     dictionaryContentType: string | null,
 }
 
-export const initialProductDetail: ProductMetaV1Detail[] = [{
-    "categoryRevision": {
-        "category": "walk_in_unit_coolers",
-        "revision": "new"
+export const initialProductDetail: ProductMetaV1Detail[] = [
+    // {
+    //     "categoryRevision": {
+    //         "category": "refrigerated_warehouse_unit_coolers",
+    //         "revision": "new"
+    //     },
+    //     "mainContentType": "ProductX4RefrigeratedWarehouseUnitCoolersNew",
+    //     "crossReferenceContentType": null,
+    //     "dictionaryContentType": null
+    // },
+    // {
+    //     "categoryRevision": {
+    //         "category": "refrigerated_warehouse_unit_coolers",
+    //         "revision": "legacy"
+    //     },
+    //     "mainContentType": "ProductX4RefrigeratedWarehouseUnitCoolersLegacy",
+    //     "crossReferenceContentType": "ProductX4RefrigeratedWarehouseUnitCoolersNewCrossReference",
+    //     "dictionaryContentType": null
+    // },
+    {
+        "categoryRevision": {
+            "category": "walk_in_unit_coolers",
+            "revision": "new"
+        },
+        "mainContentType": "ProductX4WalkInUnitCoolersNew",
+        "crossReferenceContentType": null,
+        "dictionaryContentType": "ProductX4WalkInUnitCoolersNewDictionaryRefs"
     },
-    "mainContentType": "ProductV7WalkInUnitCoolersNew",
-    "crossReferenceContentType": null,
-    "dictionaryContentType": "ProductV7WalkInUnitCoolersNewDictionaryRefs"
-}, {
-    "categoryRevision": {"category": "walk_in_unit_coolers", "revision": "legacy"},
-    "mainContentType": "ProductV7WalkInUnitCoolersLegacy",
-    "crossReferenceContentType": "ProductV7WalkInUnitCoolersNewCrossReference",
-    "dictionaryContentType": "ProductV7WalkInUnitCoolersLegacyDictionaryRefs"
-}, {
-    "categoryRevision": {"category": "pro3_packaged", "revision": "new"},
-    "mainContentType": "ProductV7Pro3PackagedNew",
-    "crossReferenceContentType": null,
-    "dictionaryContentType": "ProductV7Pro3PackagedNewDictionaryRefs"
-}, {
-    "categoryRevision": {"category": "pro3_packaged", "revision": "legacy"},
-    "mainContentType": "ProductV7Pro3PackagedLegacy",
-    "crossReferenceContentType": "ProductV7Pro3PackagedNewCrossReference",
-    "dictionaryContentType": null
-}];
+    {
+        "categoryRevision": {
+            "category": "walk_in_unit_coolers",
+            "revision": "legacy"
+        },
+        "mainContentType": "ProductX4WalkInUnitCoolersLegacy",
+        "crossReferenceContentType": "ProductX4WalkInUnitCoolersNewCrossReference",
+        "dictionaryContentType": "ProductX4WalkInUnitCoolersLegacyDictionaryRefs"
+    },
+    {
+        "categoryRevision": {
+            "category": "pro3_packaged",
+            "revision": "new"
+        },
+        "mainContentType": "ProductX4Pro3PackagedNew",
+        "crossReferenceContentType": null,
+        "dictionaryContentType": "ProductX4Pro3PackagedNewDictionaryRefs"
+    },
+    {
+        "categoryRevision": {
+            "category": "pro3_packaged",
+            "revision": "legacy"
+        },
+        "mainContentType": "ProductX4Pro3PackagedLegacy",
+        "crossReferenceContentType": "ProductX4Pro3PackagedNewCrossReference",
+        "dictionaryContentType": null
+    }];
 
 export interface ProductMetaV1DetailSpecification {
     categoryRevision: CategoryRevision,
@@ -561,6 +718,151 @@ export interface ProductMetaV1DetailSpecification {
 }
 
 export const initialProductDetailSpecification: ProductMetaV1DetailSpecification[] = [
+    // {
+    //     "categoryRevision": {
+    //         "category": "refrigerated_warehouse_unit_coolers",
+    //         "revision": "new"
+    //     },
+    //     "sections": [
+    //         {
+    //             "title": "General Information",
+    //             "attributes": [
+    //                 {
+    //                     "title": "Type",
+    //                     "contentType": "ProductKindContentType",
+    //                     "attributeId": "group",
+    //                     "type": "SIMPLE"
+    //                 },
+    //                 {
+    //                     "title": "Category",
+    //                     "contentType": "ProductKindContentType",
+    //                     "attributeId": "category",
+    //                     "type": "SIMPLE"
+    //                 },
+    //                 {
+    //                     "title": "Style",
+    //                     "contentType": "ProductX4RefrigeratedWarehouseUnitCoolersNew",
+    //                     "attributeId": "style",
+    //                     "type": "SIMPLE"
+    //                 },
+    //                 {
+    //                     "title": "Defrost Type",
+    //                     "contentType": "ProductX4RefrigeratedWarehouseUnitCoolersNew",
+    //                     "attributeId": "defrostType",
+    //                     "type": "SIMPLE"
+    //                 },
+    //                 {
+    //                     "title": "Voltage",
+    //                     "contentType": "ProductX4RefrigeratedWarehouseUnitCoolersNew",
+    //                     "attributeId": "unitVoltage",
+    //                     "type": "SIMPLE"
+    //                 },
+    //                 {
+    //                     "title": "Motor Type",
+    //                     "contentType": "ProductX4RefrigeratedWarehouseUnitCoolersNew",
+    //                     "attributeId": "motorType",
+    //                     "type": "SIMPLE"
+    //                 },
+    //                 {
+    //                     "title": "FPI",
+    //                     "contentType": "ProductX4RefrigeratedWarehouseUnitCoolersNew",
+    //                     "attributeId": "fpi",
+    //                     "type": "SIMPLE"
+    //                 },
+    //                 {
+    //                     "title": "Rating Point °F",
+    //                     "contentType": "ProductX4RefrigeratedWarehouseUnitCoolersNew",
+    //                     "attributeId": "ratingPoint",
+    //                     "type": "SIMPLE"
+    //                 },
+    //                 {
+    //                     "title": "Capacity",
+    //                     "contentType": "ProductX4RefrigeratedWarehouseUnitCoolersNew",
+    //                     "attributeId": "capacity",
+    //                     "type": "INTEGER"
+    //                 },
+    //             ]
+    //         },
+    //         {
+    //             "title": "Physical Data",
+    //             "attributes": [
+    //                 {
+    //                     "title": "Fan Diameter",
+    //                     "contentType": "ProductX4RefrigeratedWarehouseUnitCoolersNew",
+    //                     "attributeId": "fanDiameter",
+    //                     "type": "INTEGER"
+    //                 }
+    //             ]
+    //         }
+    //     ]
+    // },
+    // {
+    //     "categoryRevision": {
+    //         "category": "refrigerated_warehouse_unit_coolers",
+    //         "revision": "legacy"
+    //     },
+    //     "sections": [
+    //         {
+    //             "title": "General Information",
+    //             "attributes": [
+    //                 {
+    //                     "title": "Type",
+    //                     "contentType": "ProductKindContentType",
+    //                     "attributeId": "group",
+    //                     "type": "SIMPLE"
+    //                 },
+    //                 {
+    //                     "title": "Category",
+    //                     "contentType": "ProductKindContentType",
+    //                     "attributeId": "category",
+    //                     "type": "SIMPLE"
+    //                 },
+    //                 {
+    //                     "title": "Style",
+    //                     "contentType": "ProductX4RefrigeratedWarehouseUnitCoolersLegacy",
+    //                     "attributeId": "style",
+    //                     "type": "SIMPLE"
+    //                 },
+    //                 {
+    //                     "title": "Defrost Type",
+    //                     "contentType": "ProductX4RefrigeratedWarehouseUnitCoolersLegacy",
+    //                     "attributeId": "defrostType",
+    //                     "type": "SIMPLE"
+    //                 },
+    //                 {
+    //                     "title": "Voltage",
+    //                     "contentType": "ProductX4RefrigeratedWarehouseUnitCoolersLegacy",
+    //                     "attributeId": "unitVoltage",
+    //                     "type": "SIMPLE"
+    //                 },
+    //                 {
+    //                     "title": "Motor Type",
+    //                     "contentType": "ProductX4RefrigeratedWarehouseUnitCoolersLegacy",
+    //                     "attributeId": "motorType",
+    //                     "type": "SIMPLE"
+    //                 },
+    //                 {
+    //                     "title": "FPI",
+    //                     "contentType": "ProductX4RefrigeratedWarehouseUnitCoolersLegacy",
+    //                     "attributeId": "fpi",
+    //                     "type": "SIMPLE"
+    //                 },
+    //                 {
+    //                     "title": "Rating Point °F",
+    //                     "contentType": "ProductX4RefrigeratedWarehouseUnitCoolersLegacy",
+    //                     "attributeId": "ratingPoint",
+    //                     "type": "SIMPLE"
+    //                 },
+    //                 {
+    //                     "title": "Capacity",
+    //                     "contentType": "ProductX4RefrigeratedWarehouseUnitCoolersLegacy",
+    //                     "attributeId": "capacity",
+    //                     "type": "INTEGER"
+    //                 },
+    //             ]
+    //         }
+    //     ]
+    // },
     {
         "categoryRevision": {
             "category": "walk_in_unit_coolers",
@@ -572,49 +874,49 @@ export const initialProductDetailSpecification: ProductMetaV1DetailSpecification
                 "attributes": [
                     {
                         "title": "Type",
-                        "contentType": "ProductV7WalkInUnitCoolersNew",
+                        "contentType": "ProductKindContentType",
                         "attributeId": "group",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Category",
-                        "contentType": "ProductV7WalkInUnitCoolersNew",
+                        "contentType": "ProductKindContentType",
                         "attributeId": "category",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Style",
-                        "contentType": "ProductV7WalkInUnitCoolersNew",
+                        "contentType": "ProductX4WalkInUnitCoolersNew",
                         "attributeId": "style",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Application",
-                        "contentType": "ProductV7WalkInUnitCoolersNew",
+                        "contentType": "ProductX4WalkInUnitCoolersNew",
                         "attributeId": "applicationType",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Voltage",
-                        "contentType": "ProductV7WalkInUnitCoolersNewElectrical",
+                        "contentType": "ProductX4WalkInUnitCoolersNewElectrical",
                         "attributeId": "unitVoltage",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Defrost Type",
-                        "contentType": "ProductV7WalkInUnitCoolersNew",
+                        "contentType": "ProductX4WalkInUnitCoolersNew",
                         "attributeId": "defrostType",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "FPI",
-                        "contentType": "ProductV7WalkInUnitCoolersNew",
+                        "contentType": "ProductX4WalkInUnitCoolersNew",
                         "attributeId": "fpi",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Dual Rated",
-                        "contentType": "ProductV7WalkInUnitCoolersNewElectrical",
+                        "contentType": "ProductX4WalkInUnitCoolersNewElectrical",
                         "attributeId": "dualRated",
                         "type": "SIMPLE"
                     }
@@ -625,19 +927,19 @@ export const initialProductDetailSpecification: ProductMetaV1DetailSpecification
                 "attributes": [
                     {
                         "title": "Rating Point °F",
-                        "contentType": "ProductV7WalkInUnitCoolersNew",
+                        "contentType": "ProductX4WalkInUnitCoolersNew",
                         "attributeId": "ratingPoint",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Selection Capacity (R-448A/R-449A)",
-                        "contentType": "ProductV7WalkInUnitCoolersNew",
+                        "contentType": "ProductX4WalkInUnitCoolersNew",
                         "attributeId": "capacity",
                         "type": "INTEGER"
                     },
                     {
                         "title": "CFM",
-                        "contentType": "ProductV7WalkInUnitCoolersNew",
+                        "contentType": "ProductX4WalkInUnitCoolersNew",
                         "attributeId": "cfm",
                         "type": "DECIMAL_ROUNDED"
                     }
@@ -648,85 +950,85 @@ export const initialProductDetailSpecification: ProductMetaV1DetailSpecification
                 "attributes": [
                     {
                         "title": "Motor Type",
-                        "contentType": "ProductV7WalkInUnitCoolersNewElectrical",
+                        "contentType": "ProductX4WalkInUnitCoolersNewElectrical",
                         "attributeId": "motorType",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "No of Fans",
-                        "contentType": "ProductV7WalkInUnitCoolersNewElectrical",
+                        "contentType": "ProductX4WalkInUnitCoolersNewElectrical",
                         "attributeId": "noOfFans",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Motor HP",
-                        "contentType": "ProductV7WalkInUnitCoolersNewElectrical",
+                        "contentType": "ProductX4WalkInUnitCoolersNewElectrical",
                         "attributeId": "motorHp",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Unit MCA",
-                        "contentType": "ProductV7WalkInUnitCoolersNewElectrical",
+                        "contentType": "ProductX4WalkInUnitCoolersNewElectrical",
                         "attributeId": "unitMca",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Unit MOPD",
-                        "contentType": "ProductV7WalkInUnitCoolersNewElectrical",
+                        "contentType": "ProductX4WalkInUnitCoolersNewElectrical",
                         "attributeId": "unitMopd",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Motor Voltage",
-                        "contentType": "ProductV7WalkInUnitCoolersNewElectrical",
+                        "contentType": "ProductX4WalkInUnitCoolersNewElectrical",
                         "attributeId": "motorVoltage",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Motor Watts",
-                        "contentType": "ProductV7WalkInUnitCoolersNewElectrical",
+                        "contentType": "ProductX4WalkInUnitCoolersNewElectrical",
                         "attributeId": "motorWatts",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Motor Amps",
-                        "contentType": "ProductV7WalkInUnitCoolersNewElectrical",
+                        "contentType": "ProductX4WalkInUnitCoolersNewElectrical",
                         "attributeId": "motorAmps",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Defrost Heater Voltage",
-                        "contentType": "ProductV7WalkInUnitCoolersNewElectrical",
+                        "contentType": "ProductX4WalkInUnitCoolersNewElectrical",
                         "attributeId": "defrostHeaterVoltage",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Defrost Heater Amps",
-                        "contentType": "ProductV7WalkInUnitCoolersNewElectrical",
+                        "contentType": "ProductX4WalkInUnitCoolersNewElectrical",
                         "attributeId": "defrostHeaterAmps",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Defrost Heater Watts",
-                        "contentType": "ProductV7WalkInUnitCoolersNewElectrical",
+                        "contentType": "ProductX4WalkInUnitCoolersNewElectrical",
                         "attributeId": "defrostHeaterWatts",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Drain Pan Voltage",
-                        "contentType": "ProductV7WalkInUnitCoolersNewElectrical",
+                        "contentType": "ProductX4WalkInUnitCoolersNewElectrical",
                         "attributeId": "drainPanVoltage",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Drain Pan Amps",
-                        "contentType": "ProductV7WalkInUnitCoolersNewElectrical",
+                        "contentType": "ProductX4WalkInUnitCoolersNewElectrical",
                         "attributeId": "drainPanAmps",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Drain Pan Watts",
-                        "contentType": "ProductV7WalkInUnitCoolersNewElectrical",
+                        "contentType": "ProductX4WalkInUnitCoolersNewElectrical",
                         "attributeId": "drainPanWatts",
                         "type": "SIMPLE"
                     }
@@ -737,25 +1039,25 @@ export const initialProductDetailSpecification: ProductMetaV1DetailSpecification
                 "attributes": [
                     {
                         "title": "Height (in.)",
-                        "contentType": "ProductV7WalkInUnitCoolersNewDetails",
+                        "contentType": "ProductX4WalkInUnitCoolersNewDetails",
                         "attributeId": "heightIn",
                         "type": "FRACTION"
                     },
                     {
                         "title": "Depth (in.)",
-                        "contentType": "ProductV7WalkInUnitCoolersNewDetails",
+                        "contentType": "ProductX4WalkInUnitCoolersNewDetails",
                         "attributeId": "depthIn",
                         "type": "FRACTION"
                     },
                     {
                         "title": "Length (In.)",
-                        "contentType": "ProductV7WalkInUnitCoolersNewDetails",
+                        "contentType": "ProductX4WalkInUnitCoolersNewDetails",
                         "attributeId": "lengthIn",
                         "type": "FRACTION"
                     },
                     {
                         "title": "Est. Net Weight (lbs.)",
-                        "contentType": "ProductV7WalkInUnitCoolersNewDetails",
+                        "contentType": "ProductX4WalkInUnitCoolersNewDetails",
                         "attributeId": "estNetWeightLbs",
                         "type": "DECIMAL"
                     }
@@ -766,40 +1068,76 @@ export const initialProductDetailSpecification: ProductMetaV1DetailSpecification
                 "attributes": [
                     {
                         "title": "Coil Inlet OD",
-                        "contentType": "ProductV7WalkInUnitCoolersNewDetails",
+                        "contentType": "ProductX4WalkInUnitCoolersNewDetails",
                         "attributeId": "coilInletOd",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Suction OD",
-                        "contentType": "ProductV7WalkInUnitCoolersNewDetails",
+                        "contentType": "ProductX4WalkInUnitCoolersNewDetails",
                         "attributeId": "suctionOd",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "External Equalizer OD",
-                        "contentType": "ProductV7WalkInUnitCoolersNewDetails",
+                        "contentType": "ProductX4WalkInUnitCoolersNewDetails",
                         "attributeId": "externalEqualizedOd",
                         "type": "FRACTION"
                     },
                     {
                         "title": "Drain MPT",
-                        "contentType": "ProductV7WalkInUnitCoolersNewDetails",
+                        "contentType": "ProductX4WalkInUnitCoolersNewDetails",
                         "attributeId": "drainMpt",
                         "type": "FRACTION"
                     },
                     {
                         "title": "Side Port OD",
-                        "contentType": "ProductV7WalkInUnitCoolersNewDetails",
+                        "contentType": "ProductX4WalkInUnitCoolersNewDetails",
                         "attributeId": "sidePortOd",
                         "type": "FRACTION"
                     },
                     {
                         "title": "Hot Gas Pan Conns.OD",
-                        "contentType": "ProductV7WalkInUnitCoolersNewDetails",
+                        "contentType": "ProductX4WalkInUnitCoolersNewDetails",
                         "attributeId": "hotGasPanConnsOd",
                         "type": "FRACTION"
-                    }
+                    },
+                    {
+                        "title": "Fan Diameter (in)",
+                        "contentType": "ProductX4WalkInUnitCoolersNewDetails",
+                        "attributeId": "fanDiameterIn",
+                        "type": "INTEGER"
+                    },
+                    {
+                        "title": "Fan Diameter (mm)",
+                        "contentType": "ProductX4WalkInUnitCoolersNewDetails",
+                        "attributeId": "fanDiameterMm",
+                        "type": "INTEGER"
+                    },
+                    {
+                        "title": "Air Throw - Standard (ft)",
+                        "contentType": "ProductX4WalkInUnitCoolersNewDetails",
+                        "attributeId": "aitThrowStandardFt",
+                        "type": "INTEGER"
+                    },
+                    {
+                        "title": "Air Throw - Standard (m)",
+                        "contentType": "ProductX4WalkInUnitCoolersNewDetails",
+                        "attributeId": "aitThrowStandardM",
+                        "type": "DECIMAL"
+                    },
+                    {
+                        "title": "Air Throw - With Collar (ft)",
+                        "contentType": "ProductX4WalkInUnitCoolersNewDetails",
+                        "attributeId": "aitThrowWithCollarFt",
+                        "type": "INTEGER"
+                    },
+                    {
+                        "title": "Air Throw - With Collar (m)",
+                        "contentType": "ProductX4WalkInUnitCoolersNewDetails",
+                        "attributeId": "aitThrowWithCollarM",
+                        "type": "DECIMAL"
+                    },
                 ]
             }
         ]
@@ -815,31 +1153,31 @@ export const initialProductDetailSpecification: ProductMetaV1DetailSpecification
                 "attributes": [
                     {
                         "title": "Standard Model",
-                        "contentType": "ProductV7WalkInUnitCoolersLegacy",
+                        "contentType": "ProductX4WalkInUnitCoolersLegacy",
                         "attributeId": "modelNumber",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Config Model",
-                        "contentType": "ProductV7WalkInUnitCoolersLegacy",
+                        "contentType": "ProductX4WalkInUnitCoolersLegacy",
                         "attributeId": "configModel",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "List Price ($US)",
-                        "contentType": "ProductV7WalkInUnitCoolersLegacy",
+                        "contentType": "ProductX4WalkInUnitCoolersLegacy",
                         "attributeId": "price",
                         "type": "MONEY"
                     },
                     {
                         "title": "intelliGen™ Config Model",
-                        "contentType": "ProductV7WalkInUnitCoolersLegacy",
+                        "contentType": "ProductX4WalkInUnitCoolersLegacy",
                         "attributeId": "intelliGenConfigModel",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "intelliGen™ Config. List Price ($US)",
-                        "contentType": "ProductV7WalkInUnitCoolersLegacy",
+                        "contentType": "ProductX4WalkInUnitCoolersLegacy",
                         "attributeId": "intelliGenConfigListPrice",
                         "type": "MONEY"
                     }
@@ -850,37 +1188,37 @@ export const initialProductDetailSpecification: ProductMetaV1DetailSpecification
                 "attributes": [
                     {
                         "title": "Type",
-                        "contentType": "ProductV7WalkInUnitCoolersLegacy",
+                        "contentType": "ProductKindContentType",
                         "attributeId": "group",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Category",
-                        "contentType": "ProductV7WalkInUnitCoolersLegacy",
+                        "contentType": "ProductKindContentType",
                         "attributeId": "category",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Style",
-                        "contentType": "ProductV7WalkInUnitCoolersLegacy",
+                        "contentType": "ProductX4WalkInUnitCoolersLegacy",
                         "attributeId": "style",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Voltage",
-                        "contentType": "ProductV7WalkInUnitCoolersLegacy",
+                        "contentType": "ProductX4WalkInUnitCoolersLegacy",
                         "attributeId": "unitVoltage",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Defrost Type",
-                        "contentType": "ProductV7WalkInUnitCoolersLegacy",
+                        "contentType": "ProductX4WalkInUnitCoolersLegacy",
                         "attributeId": "defrostType",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "FPI",
-                        "contentType": "ProductV7WalkInUnitCoolersLegacy",
+                        "contentType": "ProductX4WalkInUnitCoolersLegacy",
                         "attributeId": "fpi",
                         "type": "SIMPLE"
                     }
@@ -891,19 +1229,19 @@ export const initialProductDetailSpecification: ProductMetaV1DetailSpecification
                 "attributes": [
                     {
                         "title": "Rating Point °F",
-                        "contentType": "ProductV7WalkInUnitCoolersLegacyDetails",
+                        "contentType": "ProductX4WalkInUnitCoolersLegacyDetails",
                         "attributeId": "ratingPoint",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Capacity R-404A (BTUH)",
-                        "contentType": "ProductV7WalkInUnitCoolersLegacyDetails",
+                        "contentType": "ProductX4WalkInUnitCoolersLegacyDetails",
                         "attributeId": "capacity",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "CFM",
-                        "contentType": "ProductV7WalkInUnitCoolersLegacyDetails",
+                        "contentType": "ProductX4WalkInUnitCoolersLegacyDetails",
                         "attributeId": "cfm",
                         "type": "DECIMAL_ROUNDED"
                     }
@@ -914,73 +1252,73 @@ export const initialProductDetailSpecification: ProductMetaV1DetailSpecification
                 "attributes": [
                     {
                         "title": "Motor Type",
-                        "contentType": "ProductV7WalkInUnitCoolersLegacy",
+                        "contentType": "ProductX4WalkInUnitCoolersLegacy",
                         "attributeId": "motorType",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "No. of Fans",
-                        "contentType": "ProductV7WalkInUnitCoolersLegacyElectrical",
+                        "contentType": "ProductX4WalkInUnitCoolersLegacyElectrical",
                         "attributeId": "noOfFans",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Motor HP",
-                        "contentType": "ProductV7WalkInUnitCoolersLegacyElectrical",
+                        "contentType": "ProductX4WalkInUnitCoolersLegacyElectrical",
                         "attributeId": "motorHP",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Motor Voltage",
-                        "contentType": "ProductV7WalkInUnitCoolersLegacyElectrical",
+                        "contentType": "ProductX4WalkInUnitCoolersLegacyElectrical",
                         "attributeId": "motorVoltage",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Motor Watts",
-                        "contentType": "ProductV7WalkInUnitCoolersLegacyElectrical",
+                        "contentType": "ProductX4WalkInUnitCoolersLegacyElectrical",
                         "attributeId": "motorWatts",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Motor Amps",
-                        "contentType": "ProductV7WalkInUnitCoolersLegacyElectrical",
+                        "contentType": "ProductX4WalkInUnitCoolersLegacyElectrical",
                         "attributeId": "motorAmps",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Defrost Heater Voltage",
-                        "contentType": "ProductV7WalkInUnitCoolersLegacyElectrical",
+                        "contentType": "ProductX4WalkInUnitCoolersLegacyElectrical",
                         "attributeId": "defrostHeaterVoltage",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Defrost Heater Amps",
-                        "contentType": "ProductV7WalkInUnitCoolersLegacyElectrical",
+                        "contentType": "ProductX4WalkInUnitCoolersLegacyElectrical",
                         "attributeId": "defrostHeaterAmps",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Defrost Heater Watts",
-                        "contentType": "ProductV7WalkInUnitCoolersLegacyElectrical",
+                        "contentType": "ProductX4WalkInUnitCoolersLegacyElectrical",
                         "attributeId": "defrostHeaterWatts",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Drain Pan Voltage",
-                        "contentType": "ProductV7WalkInUnitCoolersLegacyElectrical",
+                        "contentType": "ProductX4WalkInUnitCoolersLegacyElectrical",
                         "attributeId": "drainPanVoltage",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Drain Pan Amps",
-                        "contentType": "ProductV7WalkInUnitCoolersLegacyElectrical",
+                        "contentType": "ProductX4WalkInUnitCoolersLegacyElectrical",
                         "attributeId": "drainPanAmps",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Drain Pan Watts",
-                        "contentType": "ProductV7WalkInUnitCoolersLegacyElectrical",
+                        "contentType": "ProductX4WalkInUnitCoolersLegacyElectrical",
                         "attributeId": "drainPanWatts",
                         "type": "SIMPLE"
                     }
@@ -991,25 +1329,25 @@ export const initialProductDetailSpecification: ProductMetaV1DetailSpecification
                 "attributes": [
                     {
                         "title": "Height (in.)",
-                        "contentType": "ProductV7WalkInUnitCoolersLegacyDetails",
+                        "contentType": "ProductX4WalkInUnitCoolersLegacyDetails",
                         "attributeId": "heightIn",
                         "type": "FRACTION"
                     },
                     {
                         "title": "Depth (in.)",
-                        "contentType": "ProductV7WalkInUnitCoolersLegacyDetails",
+                        "contentType": "ProductX4WalkInUnitCoolersLegacyDetails",
                         "attributeId": "depthIn",
                         "type": "FRACTION"
                     },
                     {
                         "title": "Length (In.)",
-                        "contentType": "ProductV7WalkInUnitCoolersLegacyDetails",
+                        "contentType": "ProductX4WalkInUnitCoolersLegacyDetails",
                         "attributeId": "lengthIn",
                         "type": "FRACTION"
                     },
                     {
                         "title": "Approx. Net Weight (lbs.)",
-                        "contentType": "ProductV7WalkInUnitCoolersLegacyDetails",
+                        "contentType": "ProductX4WalkInUnitCoolersLegacyDetails",
                         "attributeId": "approxNetWeightLBS",
                         "type": "SIMPLE"
                     }
@@ -1020,55 +1358,55 @@ export const initialProductDetailSpecification: ProductMetaV1DetailSpecification
                 "attributes": [
                     {
                         "title": "Coil Inlet OD",
-                        "contentType": "ProductV7WalkInUnitCoolersLegacyDetails",
+                        "contentType": "ProductX4WalkInUnitCoolersLegacyDetails",
                         "attributeId": "coilInletOD",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Coil Inlet ODF",
-                        "contentType": "ProductV7WalkInUnitCoolersLegacyDetails",
+                        "contentType": "ProductX4WalkInUnitCoolersLegacyDetails",
                         "attributeId": "coilInletODF",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Suction ID",
-                        "contentType": "ProductV7WalkInUnitCoolersLegacyDetails",
+                        "contentType": "ProductX4WalkInUnitCoolersLegacyDetails",
                         "attributeId": "suctionID",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Suction OD",
-                        "contentType": "ProductV7WalkInUnitCoolersLegacyDetails",
+                        "contentType": "ProductX4WalkInUnitCoolersLegacyDetails",
                         "attributeId": "suctionOD",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "External Equalizer OD",
-                        "contentType": "ProductV7WalkInUnitCoolersLegacyDetails",
+                        "contentType": "ProductX4WalkInUnitCoolersLegacyDetails",
                         "attributeId": "externalEqualizerOD",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Drain MPT",
-                        "contentType": "ProductV7WalkInUnitCoolersLegacyDetails",
+                        "contentType": "ProductX4WalkInUnitCoolersLegacyDetails",
                         "attributeId": "drainMPT",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Drain FPT",
-                        "contentType": "ProductV7WalkInUnitCoolersLegacyDetails",
+                        "contentType": "ProductX4WalkInUnitCoolersLegacyDetails",
                         "attributeId": "drainFPT",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Side Port OD",
-                        "contentType": "ProductV7WalkInUnitCoolersLegacyDetails",
+                        "contentType": "ProductX4WalkInUnitCoolersLegacyDetails",
                         "attributeId": "sidePortOD",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Hot Gas Pan Conns.OD",
-                        "contentType": "ProductV7WalkInUnitCoolersLegacyDetails",
+                        "contentType": "ProductX4WalkInUnitCoolersLegacyDetails",
                         "attributeId": "hotGasPanConnsOD",
                         "type": "SIMPLE"
                     }
@@ -1087,31 +1425,31 @@ export const initialProductDetailSpecification: ProductMetaV1DetailSpecification
                 "attributes": [
                     {
                         "title": "Unit Amps",
-                        "contentType": "ProductV7Pro3PackagedNewDetails",
+                        "contentType": "ProductX4Pro3PackagedNewDetails",
                         "attributeId": "unitAmps",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Plug Supplied",
-                        "contentType": "ProductV7Pro3PackagedNewDetails",
+                        "contentType": "ProductX4Pro3PackagedNewDetails",
                         "attributeId": "plugSupplied",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Packaging",
-                        "contentType": "ProductV7Pro3PackagedNewDetails",
+                        "contentType": "ProductX4Pro3PackagedNewDetails",
                         "attributeId": "packaging",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Gross Weight (lbs)",
-                        "contentType": "ProductV7Pro3PackagedNewDetails",
+                        "contentType": "ProductX4Pro3PackagedNewDetails",
                         "attributeId": "grossWeightLbs",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "AWEF Notes",
-                        "contentType": "ProductV7Pro3PackagedNewDetails",
+                        "contentType": "ProductX4Pro3PackagedNewDetails",
                         "attributeId": "awefNotes",
                         "type": "SIMPLE"
                     }
@@ -1122,73 +1460,73 @@ export const initialProductDetailSpecification: ProductMetaV1DetailSpecification
                 "attributes": [
                     {
                         "title": "Type",
-                        "contentType": "ProductV7Pro3PackagedNew",
+                        "contentType": "ProductKindContentType",
                         "attributeId": "category",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Category",
-                        "contentType": "ProductV7Pro3PackagedNew",
+                        "contentType": "ProductKindContentType",
                         "attributeId": "group",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Style",
-                        "contentType": "ProductV7Pro3PackagedNew",
+                        "contentType": "ProductX4Pro3PackagedNew",
                         "attributeId": "style",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Application",
-                        "contentType": "ProductV7Pro3PackagedNew",
+                        "contentType": "ProductX4Pro3PackagedNew",
                         "attributeId": "applicationType",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Application Location",
-                        "contentType": "ProductV7Pro3PackagedNew",
+                        "contentType": "ProductX4Pro3PackagedNew",
                         "attributeId": "applicationLocation",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Operating Range",
-                        "contentType": "ProductV7Pro3PackagedNew",
+                        "contentType": "ProductX4Pro3PackagedNew",
                         "attributeId": "operatingRange",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Voltage",
-                        "contentType": "ProductV7Pro3PackagedNewDetails",
+                        "contentType": "ProductX4Pro3PackagedNewDetails",
                         "attributeId": "unitVoltage",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Defrost Type",
-                        "contentType": "ProductV7Pro3PackagedNew",
+                        "contentType": "ProductX4Pro3PackagedNew",
                         "attributeId": "defrostType",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Evap Fan Motor Type",
-                        "contentType": "ProductV7Pro3PackagedNewDetails",
+                        "contentType": "ProductX4Pro3PackagedNewDetails",
                         "attributeId": "motorType",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Refrigerant Type",
-                        "contentType": "ProductV7Pro3PackagedNew",
+                        "contentType": "ProductX4Pro3PackagedNew",
                         "attributeId": "refrigerant",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Matching NEMA Receptacle",
-                        "contentType": "ProductV7Pro3PackagedNewDetails",
+                        "contentType": "ProductX4Pro3PackagedNewDetails",
                         "attributeId": "matchingNemaReceptable",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Cabinet Size",
-                        "contentType": "ProductV7Pro3PackagedNewDetails",
+                        "contentType": "ProductX4Pro3PackagedNewDetails",
                         "attributeId": "cabinetSize",
                         "type": "SIMPLE"
                     }
@@ -1199,31 +1537,31 @@ export const initialProductDetailSpecification: ProductMetaV1DetailSpecification
                 "attributes": [
                     {
                         "title": "Evap. Fans CFM",
-                        "contentType": "ProductV7Pro3PackagedNewDetails",
+                        "contentType": "ProductX4Pro3PackagedNewDetails",
                         "attributeId": "cfm",
                         "type": "DECIMAL_ROUNDED"
                     },
                     {
                         "title": "Ambient Temperature °F",
-                        "contentType": "ProductV7Pro3PackagedNew",
+                        "contentType": "ProductX4Pro3PackagedNew",
                         "attributeId": "ambientTempF",
                         "type": "INTEGER"
                     },
                     {
                         "title": "Box Temperature °F",
-                        "contentType": "ProductV7Pro3PackagedNew",
+                        "contentType": "ProductX4Pro3PackagedNew",
                         "attributeId": "roomTempF",
                         "type": "INTEGER"
                     },
                     {
                         "title": "Capacity (BTUH) °F",
-                        "contentType": "ProductV7Pro3PackagedNew",
+                        "contentType": "ProductX4Pro3PackagedNew",
                         "attributeId": "capacity",
                         "type": "INTEGER"
                     },
                     {
                         "title": "AWEF",
-                        "contentType": "ProductV7Pro3PackagedNew",
+                        "contentType": "ProductX4Pro3PackagedNew",
                         "attributeId": "awef",
                         "type": "DECIMAL"
                     }
@@ -1234,13 +1572,13 @@ export const initialProductDetailSpecification: ProductMetaV1DetailSpecification
                 "attributes": [
                     {
                         "title": "MCA",
-                        "contentType": "ProductV7Pro3PackagedNewDetails",
+                        "contentType": "ProductX4Pro3PackagedNewDetails",
                         "attributeId": "unitMca",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "MOPD",
-                        "contentType": "ProductV7Pro3PackagedNewDetails",
+                        "contentType": "ProductX4Pro3PackagedNewDetails",
                         "attributeId": "unitMopd",
                         "type": "SIMPLE"
                     }
@@ -1251,25 +1589,25 @@ export const initialProductDetailSpecification: ProductMetaV1DetailSpecification
                 "attributes": [
                     {
                         "title": "Shipping Length (.in)",
-                        "contentType": "ProductV7Pro3PackagedNewDetails",
+                        "contentType": "ProductX4Pro3PackagedNewDetails",
                         "attributeId": "shippingLengthIn",
                         "type": "FRACTION"
                     },
                     {
                         "title": "Shipping Width (.in)",
-                        "contentType": "ProductV7Pro3PackagedNewDetails",
+                        "contentType": "ProductX4Pro3PackagedNewDetails",
                         "attributeId": "shippingWidthIn",
                         "type": "FRACTION"
                     },
                     {
                         "title": "Shipping Height (.in)",
-                        "contentType": "ProductV7Pro3PackagedNewDetails",
+                        "contentType": "ProductX4Pro3PackagedNewDetails",
                         "attributeId": "shippingHeightIn",
                         "type": "FRACTION"
                     },
                     {
                         "title": "Est. Net Weight (lbs.)",
-                        "contentType": "ProductV7Pro3PackagedNewDetails",
+                        "contentType": "ProductX4Pro3PackagedNewDetails",
                         "attributeId": "estNetWeightLbs",
                         "type": "SIMPLE"
                     }
@@ -1288,79 +1626,79 @@ export const initialProductDetailSpecification: ProductMetaV1DetailSpecification
                 "attributes": [
                     {
                         "title": "Type",
-                        "contentType": "ProductV7Pro3PackagedLegacy",
+                        "contentType": "ProductKindContentType",
                         "attributeId": "group",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Category",
-                        "contentType": "ProductV7Pro3PackagedLegacy",
+                        "contentType": "ProductKindContentType",
                         "attributeId": "category",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Style",
-                        "contentType": "ProductV7Pro3PackagedLegacy",
+                        "contentType": "ProductX4Pro3PackagedLegacy",
                         "attributeId": "style",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Application",
-                        "contentType": "ProductV7Pro3PackagedLegacy",
+                        "contentType": "ProductX4Pro3PackagedLegacy",
                         "attributeId": "applicationType",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Application Location",
-                        "contentType": "ProductV7Pro3PackagedLegacy",
+                        "contentType": "ProductX4Pro3PackagedLegacy",
                         "attributeId": "applicationLocation",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Operating Range",
-                        "contentType": "ProductV7Pro3PackagedLegacy",
+                        "contentType": "ProductX4Pro3PackagedLegacy",
                         "attributeId": "operatingRange",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Voltage",
-                        "contentType": "ProductV7Pro3PackagedLegacy",
+                        "contentType": "ProductX4Pro3PackagedLegacy",
                         "attributeId": "unitVoltage",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Defrost Type",
-                        "contentType": "ProductV7Pro3PackagedLegacy",
+                        "contentType": "ProductX4Pro3PackagedLegacy",
                         "attributeId": "defrostType",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Evap Fan Motor Type",
-                        "contentType": "ProductV7Pro3PackagedLegacy",
+                        "contentType": "ProductX4Pro3PackagedLegacy",
                         "attributeId": "motorType",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Refrigerant Type",
-                        "contentType": "ProductV7Pro3PackagedLegacy",
+                        "contentType": "ProductX4Pro3PackagedLegacy",
                         "attributeId": "refrigerant",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Plug Supplied",
-                        "contentType": "ProductV7Pro3PackagedLegacy",
+                        "contentType": "ProductX4Pro3PackagedLegacy",
                         "attributeId": "plugSupplied",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Matching NEMA Receptacle",
-                        "contentType": "ProductV7Pro3PackagedLegacy",
+                        "contentType": "ProductX4Pro3PackagedLegacy",
                         "attributeId": "matchingNemaReceptacle",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Cabinet Size",
-                        "contentType": "ProductV7Pro3PackagedLegacy",
+                        "contentType": "ProductX4Pro3PackagedLegacy",
                         "attributeId": "cabinetSize",
                         "type": "SIMPLE"
                     }
@@ -1371,25 +1709,25 @@ export const initialProductDetailSpecification: ProductMetaV1DetailSpecification
                 "attributes": [
                     {
                         "title": "Evap. Fans CFM",
-                        "contentType": "ProductV7Pro3PackagedLegacyDetails",
+                        "contentType": "ProductX4Pro3PackagedLegacyDetails",
                         "attributeId": "evapFansCfm",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Ambient Temperature °F",
-                        "contentType": "ProductV7Pro3PackagedLegacyDetails",
+                        "contentType": "ProductX4Pro3PackagedLegacyDetails",
                         "attributeId": "ambientTemperatureF",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Box Temperature °F",
-                        "contentType": "ProductV7Pro3PackagedLegacyDetails",
+                        "contentType": "ProductX4Pro3PackagedLegacyDetails",
                         "attributeId": "boxTemperatureF",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Capacity R-404A (BTUH) °F",
-                        "contentType": "ProductV7Pro3PackagedLegacyDetails",
+                        "contentType": "ProductX4Pro3PackagedLegacyDetails",
                         "attributeId": "capacity",
                         "type": "SIMPLE"
                     }
@@ -1400,13 +1738,13 @@ export const initialProductDetailSpecification: ProductMetaV1DetailSpecification
                 "attributes": [
                     {
                         "title": "MCA",
-                        "contentType": "ProductV7Pro3PackagedLegacyDetails",
+                        "contentType": "ProductX4Pro3PackagedLegacyDetails",
                         "attributeId": "mca",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "MOPD",
-                        "contentType": "ProductV7Pro3PackagedLegacyDetails",
+                        "contentType": "ProductX4Pro3PackagedLegacyDetails",
                         "attributeId": "mopd",
                         "type": "SIMPLE"
                     }
@@ -1417,31 +1755,31 @@ export const initialProductDetailSpecification: ProductMetaV1DetailSpecification
                 "attributes": [
                     {
                         "title": "Height (in.)",
-                        "contentType": "ProductV7Pro3PackagedLegacyDetails",
+                        "contentType": "ProductX4Pro3PackagedLegacyDetails",
                         "attributeId": "heightIn",
                         "type": "FRACTION"
                     },
                     {
                         "title": "Depth (in.)",
-                        "contentType": "ProductV7Pro3PackagedLegacyDetails",
+                        "contentType": "ProductX4Pro3PackagedLegacyDetails",
                         "attributeId": "depthIn",
                         "type": "FRACTION"
                     },
                     {
                         "title": "Length (In.)",
-                        "contentType": "ProductV7Pro3PackagedLegacyDetails",
+                        "contentType": "ProductX4Pro3PackagedLegacyDetails",
                         "attributeId": "lengthIn",
                         "type": "FRACTION"
                     },
                     {
                         "title": "Approx. Net Weight (lbs.)",
-                        "contentType": "ProductV7Pro3PackagedLegacyDetails",
+                        "contentType": "ProductX4Pro3PackagedLegacyDetails",
                         "attributeId": "approxNetWeightLbs",
                         "type": "SIMPLE"
                     },
                     {
                         "title": "Refrig. Charge R-404A (lbs.)",
-                        "contentType": "ProductV7Pro3PackagedLegacyDetails",
+                        "contentType": "ProductX4Pro3PackagedLegacyDetails",
                         "attributeId": "refrigChargeR404ALbs",
                         "type": "SIMPLE"
                     }
@@ -1468,27 +1806,27 @@ export const initialProductDetailDictionaries: ProductMetaV1DetailDictionary[] =
         "dictionarySpecs": [
             {
                 "dictionary": "CAPACITY",
-                "contentType": "ProductV7WalkInUnitCoolersNewCapacityDictionary"
+                "contentType": "ProductX4WalkInUnitCoolersNewCapacityDictionary"
             },
             {
                 "dictionary": "PREFERRED_OPTIONS",
-                "contentType": "ProductV7WalkInUnitCoolersNewPreferredOptionsDictionary"
+                "contentType": "ProductX4WalkInUnitCoolersNewPreferredOptionsDictionary"
             },
             {
                 "dictionary": "ALACARTE_OPTIONS",
-                "contentType": "ProductV7WalkInUnitCoolersNewAlaCarteOptionsDictionary"
+                "contentType": "ProductX4WalkInUnitCoolersNewAlaCarteOptionsDictionary"
             },
             {
                 "dictionary": "EXPANSION_VALVES",
-                "contentType": "ProductV7WalkInUnitCoolersNewExpansionValvesDictionary"
+                "contentType": "ProductX4WalkInUnitCoolersNewExpansionValvesDictionary"
             },
             {
                 "dictionary": "LIQUID_VALVES",
-                "contentType": "ProductV7WalkInUnitCoolersNewLiquidValvesDictionary"
+                "contentType": "ProductX4WalkInUnitCoolersNewLiquidValvesDictionary"
             },
             {
                 "dictionary": "SHIPPED_LOOSE",
-                "contentType": "ProductV7WalkInUnitCoolersNewShippedLooseDictionary"
+                "contentType": "ProductX4WalkInUnitCoolersNewShippedLooseDictionary"
             }
         ]
     },
@@ -1500,19 +1838,19 @@ export const initialProductDetailDictionaries: ProductMetaV1DetailDictionary[] =
         "dictionarySpecs": [
             {
                 "dictionary": "ALACARTE_OPTIONS",
-                "contentType": "ProductV7WalkInUnitCoolersLegacyAlaCarteOptionsDictionary"
+                "contentType": "ProductX4WalkInUnitCoolersLegacyAlaCarteOptionsDictionary"
             },
             {
                 "dictionary": "SHIPPED_LOOSE",
-                "contentType": "ProductV7WalkInUnitCoolersLegacyShippedLooseDictionary"
+                "contentType": "ProductX4WalkInUnitCoolersLegacyShippedLooseDictionary"
             },
             {
                 "dictionary": "EXPANSION_VALVES",
-                "contentType": "ProductV7WalkInUnitCoolersLegacyExpansionValvesDictionary"
+                "contentType": "ProductX4WalkInUnitCoolersLegacyExpansionValvesDictionary"
             },
             {
                 "dictionary": "LIQUID_VALVES",
-                "contentType": "ProductV7WalkInUnitCoolersLegacyLiquidValvesDictionary"
+                "contentType": "ProductX4WalkInUnitCoolersLegacyLiquidValvesDictionary"
             }
         ]
     },
@@ -1524,7 +1862,7 @@ export const initialProductDetailDictionaries: ProductMetaV1DetailDictionary[] =
         "dictionarySpecs": [
             {
                 "dictionary": "CAPACITY",
-                "contentType": "ProductV7Pro3PackagedNewCapacityDictionary"
+                "contentType": "ProductX4Pro3PackagedNewCapacityDictionary"
             }
         ]
     }
@@ -1539,6 +1877,22 @@ export interface ProductMetaV1DetailCrossReference {
 }
 
 export const initialProductDetailCrossReference: ProductMetaV1DetailCrossReference[] = [
+    // {
+    //     "categoryRevision": {
+    //         "category": "refrigerated_warehouse_unit_coolers",
+    //         "revision": "legacy"
+    //     },
+    //     "attributes": [
+    //         {
+    //             "categoryAttributeId": "ratingPoint",
+    //             "title": "Rating Point",
+    //         },
+    //         {
+    //             "categoryAttributeId": "capacity",
+    //             "title": "Capacity",
+    //         },
+    //     ]
+    // },
     {
         "categoryRevision": {
             "category": "walk_in_unit_coolers",

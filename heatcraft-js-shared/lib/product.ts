@@ -3,14 +3,18 @@ import {DocumentId} from "./site";
 export type Revision = 'LEGACY' | 'NEW'; // TODO: use lowercase when Java is not used anymore
 export type Brand = 'bohn' | 'larkin' | 'climate_control' | 'chandler'; // TODO: rename to BrandId
 export type Group = "evaporators_unit_coolers" | "compressorized"; // TODO: rename to GroupId
-export type Category = "pro3_packaged" | "walk_in_unit_coolers";  // TODO: rename to CategoryId
-export type Style =
+export type Category = "pro3_packaged" // TODO: rename to CategoryId
+    | "refrigerated_warehouse_unit_coolers"
+    | "walk_in_unit_coolers";
+export type Style = // TODO: rename to StyleId
     "low_profile"
     | "medium_profile"
     | "center_mount"
     | "low_velocity_center_mount"
+    | "Large_Unit_Coolers"
     | "top_mount"
-    | "side_mount";  // TODO: rename to StyleId
+    | "side_mount";
+
 
 export interface Level {
     group: Group,

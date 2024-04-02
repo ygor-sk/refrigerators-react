@@ -482,6 +482,7 @@ const attributeParsers = {
     "Capacity (BTUH) °F": parseFloatAttribute,
     "Capacity (BTUH)": parseIntegerAttribute,
     "CFM": parseIntegerAttribute,
+    "FPI": parseIntegerAttribute,
     "No. of Fans": parseIntegerAttribute,
     "Motor Watts": parseIntegerAttribute,
     "Motor Amps": parseFloatAttribute,
@@ -517,6 +518,7 @@ export function consolidatePro3PackagedLegacyProducts(crawledProducts: Pro3Packa
             brand: crawledProduct.brand,
             group: 'compressorized',
             category: 'pro3_packaged',
+            revision: "LEGACY",
             style: crawledProduct.style,
         };
         crawledProduct.basicData.forEach(attribute => product[attribute.attributeName] = parseAttribute(attribute));
@@ -547,6 +549,7 @@ export function consolidateWalkInUnitCoolersLegacyProducts(crawledProducts: Walk
                 brand: crawledProduct.brand,
                 group: 'evaporators_unit_coolers',
                 category: 'walk_in_unit_coolers',
+                revision: "LEGACY",
                 style: crawledProduct.style,
             };
             crawledProduct.basicData.forEach(attribute => product[attribute.attributeName] = parseAttribute(attribute));

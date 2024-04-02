@@ -1,0 +1,37 @@
+{
+  "name": "heatcraft-js-data-import",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/generate-csv-file.ts",
+  "scripts": {
+    "generate-csv-file": "ts-node src/generate-csv-file.ts",
+    "generate-content-type-xlsx": "ts-node src/generate-content-type-xlsx.ts",
+    "upload-to-dotcms": "ts-node src/upload-to-dotcms.ts",
+    "upload-to-mongo": "ts-node src/upload-to-mongo.ts",
+    "upload-webdav": "ts-node src/upload-webdav.ts",
+    "upload-react": "ts-node src/upload-react.ts"
+  },
+  "dependencies": {
+    "axios": "^0.19.2",
+    "cheerio": "^1.0.0-rc.3",
+    "collections": "^5.1.9",
+    "csv-parser": "^2.3.2",
+    "csv-stringify": "^5.3.6",
+    "es6-promise-pool": "^2.5.0",
+    "excel4node": "^1.7.2",
+    "mongodb": "^3.5.6",
+    "parse-int": "^1.0.3",
+    "uuid": "^3.4.0",
+    "webdav": "^3.2.0",
+    "xlsx": "^0.15.5",
+    "heatcraft-js-shared": "file:/../heatcraft-js-shared"
+  },
+  "devDependencies": {
+    "@types/mongodb": "^3.5.14",
+    "@types/cheerio": "^0.22.16",
+    "@types/lodash": "^4.14.149",
+    "@types/uuid": "^3.4.7",
+    "ts-node": "^8.6.2",
+    "typescript": "^3.7.5"
+  }
+}

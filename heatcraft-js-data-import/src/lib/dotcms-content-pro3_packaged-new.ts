@@ -1,18 +1,16 @@
 import {ContentDataType, ContentKind, ContentType, dictionaryTransformation} from "./dotcms-writer";
-import {createCrossReferenceContentType} from "./dotcms-content-generic";
 import {Pro3NewCapacityItem, SourceProduct} from "heatcraft-js-shared/lib/source-product";
+import {createCrossReferenceContentType} from "./dotcms-content-util";
 
 // noinspection NonAsciiCharacters
 export const contentTypes: ContentType[] = [
     {
-        name: "ProductV7Pro3PackagedNew",
+        name: "ProductX4Pro3PackagedNew",
         contentKind: ContentKind.PRO3_PACKAGED_NEW,
         attributes: [
             {id: "productId", description: "productId", required: true, indexed: true, unique: true, dataType: ContentDataType.INTEGER},
             {id: "modelNumber", description: "modelNumber", required: true, indexed: true, unique: false},
             {id: "brand", description: "brand", required: true, dataType: ContentDataType.SELECT},
-            {id: "group", description: "group", required: true, dataType: ContentDataType.SELECT},
-            {id: "category", description: "category", required: true, dataType: ContentDataType.SELECT},
             {id: "style", description: "style", required: true, dataType: ContentDataType.SELECT},
             {id: "price", description: "Pricing", dataType: ContentDataType.FLOAT},
             {id: "applicationType", description: "Application Type", required: true, dataType: ContentDataType.SELECT},
@@ -46,7 +44,7 @@ export const contentTypes: ContentType[] = [
 
     },
     {
-        name: "ProductV7Pro3PackagedNewDetails",
+        name: "ProductX4Pro3PackagedNewDetails",
         contentKind: ContentKind.PRO3_PACKAGED_NEW,
         attributes: [
             {id: "productId", description: "productId", required: true, indexed: true, unique: true, dataType: ContentDataType.INTEGER},
@@ -70,7 +68,7 @@ export const contentTypes: ContentType[] = [
         ]
     },
     {
-        name: "ProductV7Pro3PackagedNewDictionaryRefs",
+        name: "ProductX4Pro3PackagedNewDictionaryRefs",
         contentKind: ContentKind.PRO3_PACKAGED_NEW,
         attributes: [
             {id: "productId", description: "productId", required: true, indexed: true, unique: true, dataType: ContentDataType.INTEGER},
@@ -90,7 +88,7 @@ export const contentTypes: ContentType[] = [
         }
     },
     {
-        name: "ProductV7Pro3PackagedNewCapacityDictionary",
+        name: "ProductX4Pro3PackagedNewCapacityDictionary",
         contentKind: ContentKind.PRO3_PACKAGED_NEW_DICTIONARY,
         attributes: [
             {id: "refId", description: "refId", required: true, indexed: true, unique: false, dataType: ContentDataType.INTEGER},
@@ -108,5 +106,5 @@ export const contentTypes: ContentType[] = [
             "AWEF": capacity.outputProperties.awef,
         })),
     },
-    createCrossReferenceContentType("ProductV7Pro3PackagedNewCrossReference", ContentKind.PRO3_PACKAGED_NEW),
+    createCrossReferenceContentType("ProductX4Pro3PackagedNewCrossReference", ContentKind.PRO3_PACKAGED_NEW),
 ]
