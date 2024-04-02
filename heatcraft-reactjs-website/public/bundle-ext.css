@@ -1,0 +1,17 @@
+.primary-nav__link {
+    text-transform: uppercase;
+}
+
+.view__list th a {
+    color: white;
+}
+
+.breadcrumbs a.link {
+    color: #2D6FB7;
+    pointer-events: visible;
+}
+
+.dotcms-layout-row, .dotcms-layout-col {
+    padding: 0;
+    margin: 0;
+}
